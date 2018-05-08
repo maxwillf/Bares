@@ -92,6 +92,7 @@ void Parser::skip_ws( void )
 }
 
 
+
 //=== Non Terminal Symbols (NTS) methods.
 
 /// Validates (i.e. returns true or false) and consumes an expression from the input string.
@@ -105,10 +106,10 @@ void Parser::skip_ws( void )
  */
 Parser::ResultType Parser::expression()
 {
-    // tentamos processar um termo.
+    ResultType result;
+    // TODO: implementar esta função.
 
-    // enquanto der certo, tente processar outros termos.
-
+    return result;
 }
 
 /// Validates (i.e. returns true or false) and consumes a term from the input string.
@@ -126,13 +127,36 @@ Parser::ResultType Parser::term()
 {
     skip_ws();
     // Guarda o início do termo no input, para possíveis mensagens de erro.
+    auto begin_token( it_curr_symb );
     // Processe um inteiro.
+    auto result =  integer();
     // Vamos tokenizar o inteiro, se ele for bem formado.
+    if ( result.type == ResultType::OK )
+    {
         // Copiar a substring correspondente para uma variável string.
+        std::string token_str;
+        std::copy( begin_token, it_curr_symb, std::back_inserter( token_str ) );
         // Tentar realizar a conversão de string para inteiro (usar stoll()).
+        input_int_type token_int;
+        try { token_int = stoll( token_str ); }
+        catch( const std::invalid_argument & e )
+        {
+            return ResultType( ResultType::ILL_FORMED_INTEGER, 
+                               std::distance( expr.begin(), begin_token ) );
+        }
+
         // Recebemos um inteiro válido, resta saber se está dentro da faixa.
+        if ( token_int < std::numeric_limits< required_int_type >::min() or
+                token_int > std::numeric_limits< required_int_type >::max() )
+        {
             // Fora da faixa, reportar erro.
+            return ResultType( ResultType::INTEGER_OUT_OF_RANGE, 
+                               std::distance( expr.begin(), begin_token ) );
+        }
         // Coloca o novo token na nossa lista de tokens.
+        token_list.emplace_back( Token( token_str, Token::token_t::OPERAND ) );
+    }
+    return result;
 }
 
 /// Validates (i.e. returns true or false) and consumes an integer from the input string.
@@ -149,9 +173,12 @@ Parser::ResultType Parser::term()
 Parser::ResultType Parser::integer()
 {
     // Se aceitarmos um zero, então o inteiro acabou aqui.
+    if ( accept( terminal_symbol_t::TS_ZERO ) )
+        return ResultType( ResultType::OK );
 
     // Vamos tentar aceitar o '-'.
-    // Vamos processar um número natural.
+    accept( terminal_symbol_t::TS_MINUS );
+    return  natural_number();
 }
 
 /// Validates (i.e. returns true or false) and consumes a natural number from the input string.
@@ -166,8 +193,14 @@ Parser::ResultType Parser::integer()
  */
 Parser::ResultType Parser::natural_number()
 {
-    // Tem que vir um número que não seja zero! (de acordo com a definição), senão é erro.
+    // Tem que vir um número que não seja zero! (de acordo com a definição).
+    if ( not digit_excl_zero() )
+        return ResultType( ResultType::ILL_FORMED_INTEGER, std::distance( expr.begin(), it_curr_symb ) ) ;
+
     // Cosumir os demais dígitos, se existirem...
+    while( digit() ) /* empty */ ;
+
+    return ResultType( ResultType::OK );
 }
 
 /// Validates (i.e. returns true or false) and consumes a non-zero digit from the input string.
@@ -182,7 +215,7 @@ Parser::ResultType Parser::natural_number()
  */
 bool Parser::digit_excl_zero()
 {
-    // aceitar qualquer charactere que seja um dígito não zero.
+    return accept( terminal_symbol_t::TS_NON_ZERO_DIGIT );
 }
 
 /// Validates (i.e. returns true or false) and consumes a zero digit from the input string.
@@ -197,7 +230,15 @@ bool Parser::digit_excl_zero()
  */
 bool Parser::digit()
 {
-    // dá certo se aceitarmos zero ou processarmos um dígito que não seja zero.
+    return ( accept( terminal_symbol_t::TS_ZERO ) or digit_excl_zero() ) ? true : false;
+
+/*
+    if ( not accept( terminal_symbol_t::TS_ZERO ) )
+    {
+        return digit_excl_zero();
+    }
+    return true;
+*/
 }
 
 /*!
