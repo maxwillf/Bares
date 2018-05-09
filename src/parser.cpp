@@ -20,9 +20,9 @@ Parser::terminal_symbol_t  Parser::lexer( char c_ ) const
         case '/':  
         case '^':  
         case '%':  return terminal_symbol_t::TS_OTHERS;
-		case '(':  return terminal_symbol_t::TS_OPENING_P;
+	case '(':  return terminal_symbol_t::TS_OPENING_P;
         case ')':  return terminal_symbol_t::TS_CLOSING_P;
-		case ' ':  return terminal_symbol_t::TS_WS;
+	case ' ':  return terminal_symbol_t::TS_WS;
         case   9:  return terminal_symbol_t::TS_TAB;
         case '0':  return terminal_symbol_t::TS_ZERO;
         case '1':
