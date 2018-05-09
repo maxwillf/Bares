@@ -2,6 +2,13 @@
 #include <iterator>
 #include <algorithm>
 
+//// finds if current symbol is an operator
+bool Parser::is_operator(char c)
+{
+	return std::string("^*/%+=").find(c) != std::string::npos; 
+}
+
+
 /// Converts the input character c_ into its corresponding terminal symbol code.
 Parser::terminal_symbol_t  Parser::lexer( char c_ ) const
 {
@@ -108,8 +115,34 @@ Parser::ResultType Parser::expression()
 {
     ResultType result;
     // TODO: implementar esta função.
+	result = term();
+    if ( result.type == ResultType::OK ){
+	
+		skip_ws();
+		if(end_input()){
+			return result;
+		}
+		while(not end_input()){
+			if(is_operator(*it_curr_symb)){
+    	    	std::string token_str;
+    	    	std::copy( it_curr_symb, it_curr_symb+1, std::back_inserter( token_str ) );
+				accept(lexer(*it_curr_symb));
+    	    	
+				token_list.emplace_back( Token( token_str, Token::token_t::OPERATOR ) );
+			}
+			else{
+            
+				return ResultType( ResultType::EXTRANEOUS_SYMBOL, 
+                               std::distance( expr.begin(), it_curr_symb ) );
+			}
 
-    return result;
+			skip_ws();
+			if(*it_curr_symb == '.') std::cout << "shiet" << std::endl;
+			result = term();
+		}
+	}
+    
+	return result;
 }
 
 /// Validates (i.e. returns true or false) and consumes a term from the input string.
@@ -199,7 +232,6 @@ Parser::ResultType Parser::natural_number()
 
     // Cosumir os demais dígitos, se existirem...
     while( digit() ) /* empty */ ;
-
     return ResultType( ResultType::OK );
 }
 

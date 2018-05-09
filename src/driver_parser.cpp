@@ -60,6 +60,7 @@ int main()
     // Tentar analisar cada expressão da lista.
     for( const auto & expr : expressions )
     {
+        std::cout << ">>> Starting to parse current expr!\n";
         // Fazer o parsing desta expressão.
         auto result = my_parser.parse( expr );
         // Preparar cabeçalho da saida.

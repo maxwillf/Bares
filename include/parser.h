@@ -102,6 +102,7 @@ class Parser
         bool peek( terminal_symbol_t c_ ) const; // Peeks the current character.
         bool accept( terminal_symbol_t c_ );     // Tries to accept the requested symbol.
         bool expect( terminal_symbol_t c_ );        // Skips any WS/Tab and tries to accept the requested symbol.
+		bool is_operator(char c);    // Returns true if input is an operator
         void skip_ws( void );                    // Skips any WS/Tab ans stops at the next character.
         bool end_input( void ) const;            // Checks whether we reached the end of the expression string.
 
