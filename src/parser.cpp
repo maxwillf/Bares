@@ -5,7 +5,7 @@
 //// finds if current symbol is an operator
 bool Parser::is_operator(char c)
 {
-	return std::string("^*/%+=").find(c) != std::string::npos; 
+	return std::string("^*/%+=()").find(c) != std::string::npos; 
 }
 
 
@@ -14,9 +14,15 @@ Parser::terminal_symbol_t  Parser::lexer( char c_ ) const
 {
     switch( c_ )
     {
-        case '+':  return terminal_symbol_t::TS_PLUS;
         case '-':  return terminal_symbol_t::TS_MINUS;
-        case ' ':  return terminal_symbol_t::TS_WS;
+        case '+':  
+        case '*':  
+        case '/':  
+        case '^':  
+        case '%':  return terminal_symbol_t::TS_OTHERS;
+		case '(':  return terminal_symbol_t::TS_OPENING_P;
+        case ')':  return terminal_symbol_t::TS_CLOSING_P;
+		case ' ':  return terminal_symbol_t::TS_WS;
         case   9:  return terminal_symbol_t::TS_TAB;
         case '0':  return terminal_symbol_t::TS_ZERO;
         case '1':
@@ -114,7 +120,6 @@ void Parser::skip_ws( void )
 Parser::ResultType Parser::expression()
 {
     ResultType result;
-    // TODO: implementar esta função.
 	result = term();
     if ( result.type == ResultType::OK ){
 	
@@ -139,6 +144,7 @@ Parser::ResultType Parser::expression()
 			skip_ws();
 			if(*it_curr_symb == '.') std::cout << "shiet" << std::endl;
 			result = term();
+			skip_ws();
 		}
 	}
     

@@ -79,9 +79,11 @@ class Parser
     private:
         // Terminal symbols table
         enum class terminal_symbol_t{  // The symbols:-
-            TS_PLUS,	        //!< code for "+"
             TS_MINUS,	        //!< code for "-"
+			TS_OTHERS,			//!< code for other operands since they are unambiguous
             TS_ZERO,            //!< code for "0"
+			TS_OPENING_P,		//!< code for "("
+			TS_CLOSING_P,		//!< code for ")"
             TS_NON_ZERO_DIGIT,  //!< code for digits "1"->"9"
             TS_WS,              //!< code for a white-space
             TS_TAB,             //!< code for tab

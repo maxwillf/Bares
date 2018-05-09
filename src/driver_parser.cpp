@@ -1,7 +1,7 @@
 #include <iostream>
 #include <iomanip>
 #include <vector>
-
+#include <stack>
 #include "../include/parser.h"
 
 std::vector<std::string> expressions =
@@ -18,7 +18,9 @@ std::vector<std::string> expressions =
     "1.3 * 4",
     "a + 4",
     "       ",
-    "  123 *  548"
+    "  123 *  548",
+	"5 / 2 " ,
+	" 7 ^3 +2"
 };
 
 void print_error_msg( const Parser::ResultType & result, std::string str )
@@ -53,6 +55,56 @@ void print_error_msg( const Parser::ResultType & result, std::string str )
     std::cout << " " << error_indicator << std::endl;
 }
 
+std::stack<Token> infix_to_postfix(std::vector < Token > lista)
+{
+	std::stack <Token> posfix;
+	std::stack <Token> s;
+
+	for (const auto &c : lista) {
+		if (c.type == Token::token_t::OPERAND) {
+			posfix.push( c);
+		}	
+		else if (c.value == "(") {
+			s.push(c);	
+		}
+		else if (c.value == ")") {
+	
+			while(not s.empty() and s.top().value != "(" ){
+				
+				posfix.push( s.top());
+				s.pop();
+				}
+			s.pop();
+		}
+		else if ( c.type == Token::token_t::OPERATOR) {
+		std::cout << "Operator: " << c.value << " Precendence: " << c.precedence << std::endl;
+			while(not s.empty() and (s.top().precedence >= c.precedence)){
+					
+			posfix.push( s.top());
+			s.pop();
+			}
+
+			s.push(c);
+
+		}
+	}
+	
+	while(not s.empty())
+	{
+
+		posfix.push(s.top());
+		s.pop();
+	}
+
+	while(not posfix.empty()){
+		std::cout << "Stack values(up to bottom) " <<  posfix.top().value << std::endl;
+		posfix.pop();
+	}
+
+	return posfix; 
+}
+	
+
 
 int main()
 {
@@ -78,6 +130,7 @@ int main()
         std::copy( lista.begin(), lista.end(),
                 std::ostream_iterator< Token >(std::cout, " ") );
         std::cout << "}\n";
+		infix_to_postfix(lista);
     }
 
 
