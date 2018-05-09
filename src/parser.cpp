@@ -142,7 +142,6 @@ Parser::ResultType Parser::expression()
 			}
 
 			skip_ws();
-			if(*it_curr_symb == '.') std::cout << "shiet" << std::endl;
 			result = term();
 			skip_ws();
 		}
