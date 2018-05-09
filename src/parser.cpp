@@ -14,27 +14,27 @@ Parser::terminal_symbol_t  Parser::lexer( char c_ ) const
 {
     switch( c_ )
     {
-        case '-':  return terminal_symbol_t::TS_MINUS;
-        case '+':  
-        case '*':  
-        case '/':  
-        case '^':  
-        case '%':  return terminal_symbol_t::TS_OTHERS;
-	case '(':  return terminal_symbol_t::TS_OPENING_P;
-        case ')':  return terminal_symbol_t::TS_CLOSING_P;
-	case ' ':  return terminal_symbol_t::TS_WS;
-        case   9:  return terminal_symbol_t::TS_TAB;
-        case '0':  return terminal_symbol_t::TS_ZERO;
-        case '1':
-        case '2':
-        case '3':
-        case '4':
-        case '5':
-        case '6':
-        case '7':
-        case '8':
-        case '9':  return terminal_symbol_t::TS_NON_ZERO_DIGIT;
-        case '\0': return terminal_symbol_t::TS_EOS; // end of string: the $ terminal symbol
+		case '-':  return terminal_symbol_t::TS_MINUS;
+		case '+':  
+		case '*':  
+		case '/':  
+		case '^':  
+		case '%':  return terminal_symbol_t::TS_OTHERS;
+		case '(':  return terminal_symbol_t::TS_OPENING_P;
+		case ')':  return terminal_symbol_t::TS_CLOSING_P;
+		case ' ':  return terminal_symbol_t::TS_WS;
+		case   9:  return terminal_symbol_t::TS_TAB;
+		case '0':  return terminal_symbol_t::TS_ZERO;
+		case '1':
+		case '2':
+		case '3':
+		case '4':
+		case '5':
+		case '6':
+		case '7':
+		case '8':
+		case '9':  return terminal_symbol_t::TS_NON_ZERO_DIGIT;
+ case '\0': return terminal_symbol_t::TS_EOS; // end of string: the $ terminal symbol
     }
     return terminal_symbol_t::TS_INVALID;
 }
