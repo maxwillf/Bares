@@ -3,7 +3,7 @@
 #include <vector>
 #include <stack>
 #include "../include/parser.h"
-
+#define debug 1
 std::vector<std::string> expressions =
 {
     "10",
@@ -96,9 +96,11 @@ std::stack<Token> infix_to_postfix(std::vector < Token > lista)
 		s.pop();
 	}
 
-	while(not posfix.empty()){
-		std::cout << "Stack values(up to bottom) " <<  posfix.top().value << std::endl;
-		posfix.pop();
+	if(debug){
+		while(not posfix.empty()){
+			std::cout << "Stack values(up to bottom) " <<  posfix.top().value << std::endl;
+			posfix.pop();
+		}
 	}
 
 	return posfix; 
