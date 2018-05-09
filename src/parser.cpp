@@ -34,7 +34,7 @@ Parser::terminal_symbol_t  Parser::lexer( char c_ ) const
 		case '7':
 		case '8':
 		case '9':  return terminal_symbol_t::TS_NON_ZERO_DIGIT;
- case '\0': return terminal_symbol_t::TS_EOS; // end of string: the $ terminal symbol
+		case '\0': return terminal_symbol_t::TS_EOS; // end of string: the $ terminal symbol
     }
     return terminal_symbol_t::TS_INVALID;
 }
