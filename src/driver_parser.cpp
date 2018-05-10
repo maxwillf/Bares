@@ -1,7 +1,7 @@
 #include <iostream>
 #include <iomanip>
 #include <vector>
-#include <stack>
+#include "pilha.hpp"
 #include <cassert>
 #include "../include/parser.h"
 #define debug false
@@ -62,7 +62,7 @@ void print_error_msg( const Parser::ResultType & result, std::string str )
 std::vector<Token> infix_to_postfix(std::vector < Token > lista)
 {
 	std::vector <Token> posfix;
-	std::stack <Token> s;
+	sc::stack <Token> s;
 
 	for (const auto &c : lista) {
 		if (c.type == Token::token_t::OPERAND) {
@@ -128,7 +128,7 @@ int execute_operator(int op1, int op2, char c)
 
 int evaluate_postfix(std::vector <Token> postfix)
 {
-	std::stack<int> s;
+	sc::stack<int> s;
 	/*	while(not postfix.empty()){
 			std::cout << "Stack values(up to bottom) " <<  c.value << std::endl;
 			postfix.pop(); } */
