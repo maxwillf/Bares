@@ -5,7 +5,7 @@
 //// finds if current symbol is an operator
 bool Parser::is_operator(char c)
 {
-	return std::string("^*/%+=()").find(c) != std::string::npos; 
+	return std::string("^*/%+=()-").find(c) != std::string::npos; 
 }
 
 
@@ -127,7 +127,7 @@ Parser::ResultType Parser::expression()
 		if(end_input()){
 			return result;
 		}
-		while(not end_input()){
+		while(not end_input() and result.type == ResultType::OK ){
 			if(is_operator(*it_curr_symb)){
     	    	std::string token_str;
     	    	std::copy( it_curr_symb, it_curr_symb+1, std::back_inserter( token_str ) );
@@ -143,6 +143,7 @@ Parser::ResultType Parser::expression()
 
 			skip_ws();
 			result = term();
+			if(result.type != ResultType::OK) return result;
 			skip_ws();
 		}
 	}
@@ -164,21 +165,58 @@ Parser::ResultType Parser::expression()
 Parser::ResultType Parser::term()
 {
     skip_ws();
+	ResultType result;
     // Guarda o início do termo no input, para possíveis mensagens de erro.
     auto begin_token( it_curr_symb );
+
+    // Copiar a substring correspondente para uma variável string.
+	std::string token_str;
+	if(lexer(*it_curr_symb) == terminal_symbol_t::TS_OPENING_P){
+		std::copy( it_curr_symb, it_curr_symb+1, std::back_inserter( token_str ) );
+		accept(lexer(*it_curr_symb));
+
+		token_list.emplace_back( Token( token_str, Token::token_t::OPERATOR ) );
+
+		result = expression();
+
+		if(result.type != ResultType::OK) return result;
+
+		skip_ws();
+
+		if(lexer(*it_curr_symb) == terminal_symbol_t::TS_CLOSING_P){
+			std::copy( it_curr_symb, it_curr_symb+1, std::back_inserter( token_str ) );
+			accept(lexer(*it_curr_symb));
+
+			token_list.emplace_back( Token( token_str, Token::token_t::OPERATOR ) );
+			return result;
+		}
+		else return ResultType (ResultType::EXTRANEOUS_SYMBOL,
+                               std::distance( expr.begin(), begin_token ) );
+	}
+	/*if(lexer(*it_curr_symb) == terminal_symbol_t::TS_CLOSING_P){
+		std::copy( it_curr_symb, it_curr_symb+1, std::back_inserter( token_str ) );
+		accept(lexer(*it_curr_symb));
+
+		token_list.emplace_back( Token( token_str, Token::token_t::OPERATOR ) );
+		return ResultType (ResultType::OK);
+
+	}*/
+
     // Processe um inteiro.
-    auto result =  integer();
+    result =  integer();
     // Vamos tokenizar o inteiro, se ele for bem formado.
     if ( result.type == ResultType::OK )
     {
-        // Copiar a substring correspondente para uma variável string.
-        std::string token_str;
         std::copy( begin_token, it_curr_symb, std::back_inserter( token_str ) );
         // Tentar realizar a conversão de string para inteiro (usar stoll()).
         input_int_type token_int;
-        try { token_int = stoll( token_str ); }
+		
+		//input_int_type  teste;
+        try { token_int = stoll( token_str );}
+	
         catch( const std::invalid_argument & e )
         {
+			std::cout << "SAIU AQUI" << std::endl;
             return ResultType( ResultType::ILL_FORMED_INTEGER, 
                                std::distance( expr.begin(), begin_token ) );
         }
@@ -230,7 +268,10 @@ Parser::ResultType Parser::integer()
  * @return true if a natural number has been successfuly parsed from the input; false otherwise.
  */
 Parser::ResultType Parser::natural_number()
-{
+{		
+	// Se for um ) entao o numero acabou.
+	if(lexer(*it_curr_symb) == terminal_symbol_t::TS_CLOSING_P)
+		return ResultType(ResultType::OK);
     // Tem que vir um número que não seja zero! (de acordo com a definição).
     if ( not digit_excl_zero() )
         return ResultType( ResultType::ILL_FORMED_INTEGER, std::distance( expr.begin(), it_curr_symb ) ) ;

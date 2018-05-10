@@ -2,8 +2,9 @@
 #include <iomanip>
 #include <vector>
 #include <stack>
+#include <cassert>
 #include "../include/parser.h"
-#define debug 1
+#define debug false
 std::vector<std::string> expressions =
 {
     "10",
@@ -20,7 +21,10 @@ std::vector<std::string> expressions =
     "       ",
     "  123 *  548",
 	"5 / 2 " ,
-	" 7 ^3 +2"
+	" 7 ^3 +2",
+	" 3+(5+2) ",
+	"(2*3+(5-2))",
+	"(2*3+(5-2)"
 };
 
 void print_error_msg( const Parser::ResultType & result, std::string str )
@@ -55,14 +59,14 @@ void print_error_msg( const Parser::ResultType & result, std::string str )
     std::cout << " " << error_indicator << std::endl;
 }
 
-std::stack<Token> infix_to_postfix(std::vector < Token > lista)
+std::vector<Token> infix_to_postfix(std::vector < Token > lista)
 {
-	std::stack <Token> posfix;
+	std::vector <Token> posfix;
 	std::stack <Token> s;
 
 	for (const auto &c : lista) {
 		if (c.type == Token::token_t::OPERAND) {
-			posfix.push( c);
+			posfix.push_back( c);
 		}	
 		else if (c.value == "(") {
 			s.push(c);	
@@ -71,7 +75,7 @@ std::stack<Token> infix_to_postfix(std::vector < Token > lista)
 	
 			while(not s.empty() and s.top().value != "(" ){
 				
-				posfix.push( s.top());
+				posfix.push_back( s.top());
 				s.pop();
 				}
 			s.pop();
@@ -80,7 +84,7 @@ std::stack<Token> infix_to_postfix(std::vector < Token > lista)
 		std::cout << "Operator: " << c.value << " Precendence: " << c.precedence << std::endl;
 			while(not s.empty() and (s.top().precedence >= c.precedence)){
 					
-			posfix.push( s.top());
+			posfix.push_back( s.top());
 			s.pop();
 			}
 
@@ -92,20 +96,64 @@ std::stack<Token> infix_to_postfix(std::vector < Token > lista)
 	while(not s.empty())
 	{
 
-		posfix.push(s.top());
+		posfix.push_back(s.top());
 		s.pop();
 	}
 
 	if(debug){
-		while(not posfix.empty()){
-			std::cout << "Stack values(up to bottom) " <<  posfix.top().value << std::endl;
-			posfix.pop();
-		}
+		for (auto i = posfix.begin(); i != posfix.end(); ++i) {
+			std::cout << *i << std::endl;
+		}	
 	}
 
 	return posfix; 
 }
-	
+int execute_operator(int op1, int op2, char c)
+{
+	switch( c )
+	{
+		case '^': return pow(op1,op2);
+		case '*': return op1*op2;
+		case '/': if (op2 == 0) throw std::runtime_error("Division by zero");
+					  return op1/op2;
+		case '%': if (op2 == 0) throw std::runtime_error("Division by zero");
+					  return op1%op2;
+		case '+' : return op1+op2;
+		case '-' : return op1-op2;
+//		default  : assert( false );
+
+
+	}
+}
+
+int evaluate_postfix(std::vector <Token> postfix)
+{
+	std::stack<int> s;
+	/*	while(not postfix.empty()){
+			std::cout << "Stack values(up to bottom) " <<  c.value << std::endl;
+			postfix.pop(); } */
+	int result = 0;
+	if(postfix.size() == 1) return std::stoll(postfix[0].value);
+	for(const auto & c: postfix)
+	{
+		if(  c.type == Token::token_t::OPERAND  ){
+			s.push(  std::stoll(c.value ) );
+		}
+		else if (not postfix.empty() and
+				c.type == Token::token_t::OPERATOR ) {
+			auto op2(s.top() ); s.pop();	
+			auto op1(s.top() ); s.pop();	
+
+			s.push( execute_operator(op1,op2,c.value[0]));
+			result = s.top();
+		}
+		else assert(false);
+	}
+	return result;
+}
+
+
+
 
 
 int main()
@@ -114,7 +162,6 @@ int main()
     // Tentar analisar cada expressão da lista.
     for( const auto & expr : expressions )
     {
-        std::cout << ">>> Starting to parse current expr!\n";
         // Fazer o parsing desta expressão.
         auto result = my_parser.parse( expr );
         // Preparar cabeçalho da saida.
@@ -132,7 +179,9 @@ int main()
         std::copy( lista.begin(), lista.end(),
                 std::ostream_iterator< Token >(std::cout, " ") );
         std::cout << "}\n";
-		infix_to_postfix(lista);
+		if(result.type != Parser::ResultType::OK) continue;
+		std::vector<Token> postfix = infix_to_postfix(lista);
+		std::cout << "Resultado: " <<	evaluate_postfix(postfix) << std::endl;
     }
 
 

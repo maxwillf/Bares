@@ -54,8 +54,10 @@ class Parser
                     : type{ type_ }
                     , at_col{ col_ }
             { /* empty */ }
+		
         };
 
+		bool is_operator(char c);    // Returns true if input is an operator
         //==== Aliases
         typedef short int required_int_type; //!< The interger type we accept as valid for an expression.
         typedef long long int input_int_type; //!< The integer type that we read from the input (larger thatn the required int).
@@ -104,7 +106,6 @@ class Parser
         bool peek( terminal_symbol_t c_ ) const; // Peeks the current character.
         bool accept( terminal_symbol_t c_ );     // Tries to accept the requested symbol.
         bool expect( terminal_symbol_t c_ );        // Skips any WS/Tab and tries to accept the requested symbol.
-		bool is_operator(char c);    // Returns true if input is an operator
         void skip_ws( void );                    // Skips any WS/Tab ans stops at the next character.
         bool end_input( void ) const;            // Checks whether we reached the end of the expression string.
 
