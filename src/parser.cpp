@@ -133,7 +133,7 @@ Parser::ResultType Parser::expression()
     	    	std::copy( it_curr_symb, it_curr_symb+1, std::back_inserter( token_str ) );
 				accept(lexer(*it_curr_symb));
     	    	
-				token_list.emplace_back( Token( token_str, Token::token_t::OPERATOR ) );
+				token_list.push_back( Token( token_str, Token::token_t::OPERATOR ) );
 			}
 			else{
             
@@ -175,7 +175,7 @@ Parser::ResultType Parser::term()
 		std::copy( it_curr_symb, it_curr_symb+1, std::back_inserter( token_str ) );
 		accept(lexer(*it_curr_symb));
 
-		token_list.emplace_back( Token( token_str, Token::token_t::OPERATOR ) );
+		token_list.push_back( Token( token_str, Token::token_t::OPERATOR ) );
 
 		result = expression();
 
@@ -187,7 +187,7 @@ Parser::ResultType Parser::term()
 			std::copy( it_curr_symb, it_curr_symb+1, std::back_inserter( token_str ) );
 			accept(lexer(*it_curr_symb));
 
-			token_list.emplace_back( Token( token_str, Token::token_t::OPERATOR ) );
+			token_list.push_back( Token( token_str, Token::token_t::OPERATOR ) );
 			return result;
 		}
 		else return ResultType (ResultType::EXTRANEOUS_SYMBOL,
@@ -197,7 +197,7 @@ Parser::ResultType Parser::term()
 		std::copy( it_curr_symb, it_curr_symb+1, std::back_inserter( token_str ) );
 		accept(lexer(*it_curr_symb));
 
-		token_list.emplace_back( Token( token_str, Token::token_t::OPERATOR ) );
+		token_list.push_back( Token( token_str, Token::token_t::OPERATOR ) );
 		return ResultType (ResultType::OK);
 
 	}*/
@@ -230,7 +230,7 @@ Parser::ResultType Parser::term()
                                std::distance( expr.begin(), begin_token ) );
         }
         // Coloca o novo token na nossa lista de tokens.
-        token_list.emplace_back( Token( token_str, Token::token_t::OPERAND ) );
+        token_list.push_back( Token( token_str, Token::token_t::OPERAND ) );
     }
     return result;
 }
