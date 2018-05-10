@@ -7,6 +7,21 @@
 
 namespace sc
 {
+/*! A custom copy since std::copy doesn't work with my vector
+ * @params InputIt
+ * @params OutputIt
+ * @return d_first
+ * */
+template<class InputIt, class OutputIt>
+OutputIt copy(InputIt first, InputIt last, 
+              OutputIt d_first)
+{
+    while (first != last) {
+        *d_first++ = *first++;
+    }
+    return d_first;
+}
+
 
 	/* Special Member Block {{{*/
 
@@ -15,7 +30,7 @@ namespace sc
 	 * \param 	size_type count : Number of elements that the vector will have
 	 */
 	template <class T>
-	Vector<T>::Vector( size_type count ){
+	vector<T>::vector( size_type count ){
 		m_capacity = 2;
 		if( count >= 2 ){
 			while( count >= m_capacity){
@@ -33,14 +48,14 @@ namespace sc
 		this->m_last = elements + count;
 		this->m_size = count;
 
-		if(debug) std::cout << "> Vector allocated with sucess!" << std::endl;
+		if(debug) std::cout << "> vector allocated with sucess!" << std::endl;
 	}
 
 	/*!
 	 * \brief	Default constructor that creates an empty list
 	 */
 	template <class T>
-	Vector<T>::Vector( void ){
+	vector<T>::vector( void ){
 		int temp_capacity = 2;		
 
 		this->elements = new T[temp_capacity];
@@ -49,15 +64,15 @@ namespace sc
 		this->m_size = 0; 
 		this->m_capacity = temp_capacity;
 
-		if(debug) std::cout << "> Vector allocated with sucess!" << std::endl;
+		if(debug) std::cout << "> vector allocated with sucess!" << std::endl;
 	}
 
 	/*!
-	 * \brief 	Copy constructor, makes a *deep copy* of another Vector object
-	 * \param 	const Vector &other : Another Vector object
+	 * \brief 	Copy constructor, makes a *deep copy* of another vector object
+	 * \param 	const vector &other : Another vector object
 	 */
 	template <class T>
-	Vector<T>::Vector( const Vector &other ){
+	vector<T>::vector( const vector &other ){
 		int temp_capacity;
 		if( other.size() > 2 ){
 			temp_capacity = pow( 2, int(log2(other.size())) );
@@ -81,10 +96,10 @@ namespace sc
 	/*!
 	 * \brief 	Constructor that takes a std::initializer_list as arg.
 	 * \param 	std::initializer_list ilist : Initializer list that will
-	 * 			turn into a Vector
+	 * 			turn into a vector
 	 */
 	template <class T>
-	Vector<T>::Vector( std::initializer_list<T> ilist ){
+	vector<T>::vector( std::initializer_list<T> ilist ){
 	int temp_capacity;			
 		if( ilist.size() > 2 ){
 			temp_capacity = pow( 2, int(log2(ilist.size())) );					
@@ -112,7 +127,7 @@ namespace sc
 	 * \param 	InputIt *last : Last (stub) element from the array
 	 */
 	template <class InputIt>
-	Vector<InputIt>::Vector( InputIt *first, InputIt *last ){
+	vector<InputIt>::vector( InputIt *first, InputIt *last ){
 		int temp_capacity;		
 		int size = std::distance(first, last);
 		if( size > 2 ){
@@ -138,40 +153,40 @@ namespace sc
 	 * \brief 	Default destructor
 	 */
 	template <class T>
-	Vector<T>::~Vector(){
+	vector<T>::~vector(){
 		if(elements != NULL){
 			delete[] elements;
-			if(debug) std::cout << "> Vector deleted with sucess!" << std::endl;
+			if(debug) std::cout << "> vector deleted with sucess!" << std::endl;
 		}
 	}
 	/*}}}*/
 
 	/* Capacity Methods {{{*/
 	/*!
-	 * 	\brief	Tells if a sc::Vector is empty (0 elements)
+	 * 	\brief	Tells if a sc::vector is empty (0 elements)
 	 * 	\return	bool result : True if the element is empty, false otherwise	
 	 */
 	template <class T>
-	bool Vector<T>::empty(){
+	bool vector<T>::empty(){
 		return (m_size == 0 ? true : false);
 	}
 
 	/*!
-	 * \brief	Discover how many elements the sc::Vector has
-	 * \return	size_type size : Size of elements in the sc::Vector
+	 * \brief	Discover how many elements the sc::vector has
+	 * \return	size_type size : Size of elements in the sc::vector
 	 */
 	template <class T>
-	size_type Vector<T>::size() const {
+	size_type vector<T>::size() const {
 		return this->m_size;
 	}
 
 	/*! 
-	 * \brief	Discover what is the total capacity of the sc::Vector	
+	 * \brief	Discover what is the total capacity of the sc::vector	
 	 * \return 	size_type capacity : maximum amount of elements for current
 	 * 			allocated size
 	 */
 	template <class T>
-	size_type Vector<T>::capacity() const{
+	size_type vector<T>::capacity() const{
 		return this->m_capacity;
 	}
 
@@ -180,7 +195,7 @@ namespace sc
 	 * \param new_cap expected size of the array after function call
 	 */
 	template <class T>
-	void Vector<T>::reserve(size_type new_cap){
+	void vector<T>::reserve(size_type new_cap){
 		if( new_cap > m_capacity ){
 			while(new_cap > m_capacity){
 				m_capacity *= 2;	
@@ -197,11 +212,11 @@ namespace sc
 
 	/* Modifiers Methods {{{*/
 	/*!
-	 * \brief 	Insert an element in the end of the sc::Vector
+	 * \brief 	Insert an element in the end of the sc::vector
 	 * \param 	const T& value : Value to be inserted on the list
 	 */
 	template <class T>
-	void Vector<T>::push_back( const T& value ){
+	void vector<T>::push_back( const T& value ){
 		
 		if( m_size < m_capacity ){
 			*(m_last++) = value;
@@ -216,11 +231,11 @@ namespace sc
 	}
 	/*! Adds an element to the front of the array */
 	/*!
-	 * \brief	Insert an element in the first position in the sc::Vector
+	 * \brief	Insert an element in the first position in the sc::vector
 	 * \param	const T& value : Value to be inserted on the list
 	 */
 	template <typename T>
-	void Vector<T>::push_front(const T & value){
+	void vector<T>::push_front(const T & value){
 	
 		if(m_size <= 2){
 			this->reserve(2);
@@ -248,10 +263,10 @@ namespace sc
 		}
 	}
 	/*!
-	 * \brief	Remove an element from the first position on the sc::Vector
+	 * \brief	Remove an element from the first position on the sc::vector
 	 */
 	template <typename T>
-	void Vector<T>::pop_front(){
+	void vector<T>::pop_front(){
 
 		if(m_size != 0){
 			std::copy(m_first+1,m_last,m_first);
@@ -263,10 +278,10 @@ namespace sc
 		}
 	}
 	/*!
-	 * \brief	Remove an element from the last position on the sc::Vector
+	 * \brief	Remove an element from the last position on the sc::vector
 	 */
 	template <typename T>
-	void Vector<T>::pop_back(){
+	void vector<T>::pop_back(){
 
 		if(m_size != 0){
 			m_size--;
@@ -278,12 +293,12 @@ namespace sc
 	}
 
 	/*!
-	 * \brief 	Insert an defined number of terms on the sc::Vector object
+	 * \brief 	Insert an defined number of terms on the sc::vector object
 	 * \param 	iterator pos : Position to start inserting elements
 	 * \param 	const T& value : Value to be inserted
 	 */
 	template <typename T>
-	typename Vector<T>::iterator Vector<T>::insert
+	typename vector<T>::iterator vector<T>::insert
 	(iterator pos, const T &value){
 		int distance = pos - m_first;
 
@@ -311,13 +326,13 @@ namespace sc
 	}
 
 	/*!
-	 * \brief 	Insert an defined number of terms on the sc::Vector object
+	 * \brief 	Insert an defined number of terms on the sc::vector object
 	 * \param 	iterator pos : Position to start inserting elements
 	 * \param 	iterator first : First iterator that will be inserted
 	 * \param 	iterator last : Last iterator that will stop the insertion
 	 */
 	template <typename T>
-	typename Vector<T>::iterator Vector<T>::insert
+	typename vector<T>::iterator vector<T>::insert
 	(iterator pos,iterator first, iterator last ){
 		int distance = last-first;
 		int first_index = pos-m_first;
@@ -354,13 +369,13 @@ namespace sc
 	}
 
 	/*!
-	 * \brief 	Insert an defined number of terms on the sc::Vector object
+	 * \brief 	Insert an defined number of terms on the sc::vector object
 	 * \param 	iterator pos : Position to start inserting elements
 	 * \param 	std::initializer_list<T> ilist : initializer_list object that
-	 * 			will be inserted on the sc::Vector
+	 * 			will be inserted on the sc::vector
 	 */
 	template <typename T>
-	typename Vector<T>::iterator Vector<T>::insert
+	typename vector<T>::iterator vector<T>::insert
 	(iterator pos,std::initializer_list<T> ilist){
 
 		int first_index = pos-m_first;
@@ -395,10 +410,10 @@ namespace sc
 	}
 
 	/*!
-	 * \brief 	Reset current sc::Vector object
+	 * \brief 	Reset current sc::vector object
 	 */
 	template <typename T>
-	void Vector<T>::clear(void){
+	void vector<T>::clear(void){
 		m_size = 0;
 		m_first = elements;
 		m_last = elements;
@@ -410,7 +425,7 @@ namespace sc
 	 * \param 	const T &value : Value that will be inserted
 	 */
 	template <typename T>
-	void Vector<T>::assign(size_type count,  const T & value){
+	void vector<T>::assign(size_type count,  const T & value){
 
 	clear();
 	reserve(count);
@@ -427,7 +442,7 @@ namespace sc
 	 * \param 	iterator last : Last iterator element
 	 */
 	template <typename T>
-	void Vector<T>::assign(iterator first, iterator last){
+	void vector<T>::assign(iterator first, iterator last){
 	
 		int distance = last-first;
 		clear();
@@ -441,10 +456,10 @@ namespace sc
 	/*!
 	 * \brief 	Replaces the contents with count copies of pre-defined values
 	 * \param 	std::initializer_list<T> ilist : initializer_list that will 
-	 * 			populate the sc::Vector object
+	 * 			populate the sc::vector object
 	 */
 	template <typename T>
-	void Vector<T>::assign(std::initializer_list<T> ilist){
+	void vector<T>::assign(std::initializer_list<T> ilist){
 	if(m_capacity < ilist.size()){
 
 			while(m_capacity < ilist.size( )){
@@ -459,10 +474,10 @@ namespace sc
 	}
 
 	/*!
-	 * \brief 	Resizes if needed the total capacity of a sc::Vector object
+	 * \brief 	Resizes if needed the total capacity of a sc::vector object
 	 */
 	template <typename T>
-	void Vector<T>::shrink_to_fit(void){
+	void vector<T>::shrink_to_fit(void){
 
 			m_capacity = pow(2,int(log2(m_size))+1);
 			T *temp_elements = new T[m_capacity];
@@ -474,12 +489,12 @@ namespace sc
 	}
 
 	/*!
-	 * \brief 	Removes from the sc::Vector either a element or a range of
+	 * \brief 	Removes from the sc::vector either a element or a range of
 	 * 			elements (first, last)
 	 * \param	iterator pos : The position of the element to be erased	
 	 */
 	template <typename T>
-	typename Vector<T>::iterator Vector<T>::erase(iterator pos){
+	typename vector<T>::iterator vector<T>::erase(iterator pos){
 		int index = pos-m_first;
 		if(pos == end()-1 or pos == end()){
 			m_last--;
@@ -504,13 +519,13 @@ namespace sc
 
 
 	/*!
-	 * \brief 	Removes from the sc::Vector either a element or a range of
+	 * \brief 	Removes from the sc::vector either a element or a range of
 	 * 			elements (first, last)
 	 * \param	iterator first : First position iterator
 	 * \param	iterator last : Last position iterator
 	 */
 	template <typename T>
-	typename Vector<T>::iterator Vector<T>::erase
+	typename vector<T>::iterator vector<T>::erase
 	( iterator first, iterator last ){
 		int index = first-m_first;
 		int index_l = last-m_first;
@@ -529,7 +544,7 @@ namespace sc
 	 * \return The value of the first element of the vector (vector[0]).
 	 */
 	template <class T>
-	const T &Vector<T>::front() const{
+	const T &vector<T>::front() const{
 		return *(this->m_first);
 	}
 
@@ -538,7 +553,7 @@ namespace sc
 	 * \return The value of the last element of the vector (vector[size-1]).
 	 */
 	template <class T>
-	const T &Vector<T>::back() const{
+	const T &vector<T>::back() const{
 		T *valid_l = this->m_last - 1;
 		return *valid_l;
 	}
@@ -549,7 +564,7 @@ namespace sc
 	 * \return Element at defined position
 	 */
 	template <class T>
-	T &Vector<T>::at( size_type pos ){
+	T &vector<T>::at( size_type pos ){
 		return ( this->elements[pos] );
 	}
 
@@ -558,22 +573,22 @@ namespace sc
 	/* Operators Overloading {{{*/
 
 	/*!
-	 * \brief 	sc::Vector operator `[]` overload function
+	 * \brief 	sc::vector operator `[]` overload function
 	 * \param 	size_type pos : The desired position to access in elements[pos].
 	 * \return 	The element at elements[pos].
 	 */
 	template <class T>
-	T& Vector<T>::operator[]( size_type pos ){
+	T& vector<T>::operator[]( size_type pos ){
 		return this->elements[pos]; 
 	}
 
 	/*!
-	 * \brief	sc::Vector operator `=` overload function
-	 * \param	const Vector<T> &rhs : Right hand side object
+	 * \brief	sc::vector operator `=` overload function
+	 * \param	const vector<T> &rhs : Right hand side object
 	 * \return	The right hand side object
 	 */
 	template <class T>
-	Vector<T> &Vector<T>::operator=( const Vector<T> &rhs ){
+	vector<T> &vector<T>::operator=( const vector<T> &rhs ){
 		if( this->m_size < rhs.m_size ){
 			this->reserve( rhs.m_size );
 		}
@@ -590,12 +605,12 @@ namespace sc
 	}
 
 	/*!
-	 * \brief	sc::Vector operator '=' overload function that constructs the 
+	 * \brief	sc::vector operator '=' overload function that constructs the 
 	 * 			object following a std::initializer_list object.
 	 * \param 	std::initializer_list ilist : Initializer list object
 	 */
 	template <class T>
-	Vector<T> &Vector<T>::operator=( std::initializer_list<T> ilist ){
+	vector<T> &vector<T>::operator=( std::initializer_list<T> ilist ){
 		int temp_capacity;
 		if( ilist.size() > 2 ){
 			temp_capacity = pow( 2, int( log2( ilist.size() ) ) );
@@ -621,13 +636,13 @@ namespace sc
 	}
 
 	/*!
-	 * \brief	sc::Vector operator `==` overload function
-	 * \param	const Vector<T> &rhs : Right hand side object
+	 * \brief	sc::vector operator `==` overload function
+	 * \param	const vector<T> &rhs : Right hand side object
 	 * \return	bool value if the two objects are equal.
 	 * 			(true = 1, false = 0)
 	 */
 	template <class T>
-	bool Vector<T>::operator==( const Vector &rhs ){
+	bool vector<T>::operator==( const vector &rhs ){
 		if( rhs.m_size != this->m_size ){
 			return false;
 		} else {
@@ -642,13 +657,13 @@ namespace sc
 	}
 
 	/*!
-	 * \brief	sc::Vector operator `!=` overload function
-	 * \param	const Vector<T> &rhs : Right hand side object
+	 * \brief	sc::vector operator `!=` overload function
+	 * \param	const vector<T> &rhs : Right hand side object
 	 * \return	bool value if the two objects are unequal.
 	 * 			(true = 1, false = 0)
 	 */
 	template <class T>
-	bool Vector<T>::operator!=( const Vector &rhs ){
+	bool vector<T>::operator!=( const vector &rhs ){
 		if( *this == rhs ){
 			return false;
 		} else {
@@ -657,16 +672,16 @@ namespace sc
 	}
 	/*}}}*/
 
-	/* Vector Iterators {{{*/
+	/* vector Iterators {{{*/
 
 	/*!
 	 * \brief Begin iterator
 	 * \return Iterator to the first element of the vector.
 	 */
 	template <class T>
-	typename Vector<T>::iterator Vector<T>::begin(){
-		return Vector<T>::iterator(this->m_first);
-		// return Vector<T>::iterator(this->m_first);
+	typename vector<T>::iterator vector<T>::begin(){
+		return vector<T>::iterator(this->m_first);
+		// return vector<T>::iterator(this->m_first);
 	}
 
 	/*!
@@ -674,9 +689,9 @@ namespace sc
 	 * \return Iterator to the last element of the vector.
 	 */
 	template <class T>
-	typename Vector<T>::iterator Vector<T>::end(){
-		return Vector<T>::iterator(this->m_last);
-		// return Vector<T>::iterator(this->m_last);
+	typename vector<T>::iterator vector<T>::end(){
+		return vector<T>::iterator(this->m_last);
+		// return vector<T>::iterator(this->m_last);
 	}
 
 	/*!
@@ -684,8 +699,8 @@ namespace sc
 	 * \return A constant iterator to the first element of the vector.
 	 */
 	template <class T>
-	typename Vector<T>::const_iterator Vector<T>::cbegin() const{
-		return Vector<T>::const_iterator(this->m_first);
+	typename vector<T>::const_iterator vector<T>::cbegin() const{
+		return vector<T>::const_iterator(this->m_first);
 	}
 
 	/*!
@@ -693,8 +708,8 @@ namespace sc
 	 * \return A constant iterator to the last element of the vector.
 	 */
 	template <class T>
-	typename Vector<T>::const_iterator Vector<T>::cend() const{
-		return Vector<T>::const_iterator(this->m_last);
+	typename vector<T>::const_iterator vector<T>::cend() const{
+		return vector<T>::const_iterator(this->m_last);
 	}
 	/*}}}*/
 
@@ -706,16 +721,16 @@ namespace sc
 	 * 			iterator.
 	 */
 	template <class T>
-	Vector<T>::iterator::iterator( T *ptr ){
+	vector<T>::iterator::iterator( T *ptr ){
 		this->m_ptr = ptr;
 	}
 
 	/*!
 	 * \brief Alternative constructor, that recieves another iterator.
-	 * \param const Vector<U>::iterator &itr : Another iterator from Vector<U>.
+	 * \param const vector<U>::iterator &itr : Another iterator from vector<U>.
 	 */
 	template <class U>
-	Vector<U>::iterator::iterator( const Vector<U>::iterator &itr ){
+	vector<U>::iterator::iterator( const vector<U>::iterator &itr ){
 		this->m_ptr = itr.m_ptr;
 	}
 
@@ -723,34 +738,34 @@ namespace sc
 	 * \brief	Default iterator destructor
 	 */
 	template <class U>
-	Vector<U>::iterator::~iterator() = default;
+	vector<U>::iterator::~iterator() = default;
 
 	/*!
 	 * \brief Operator `=` overload function
-	 * \param const Vector::iterator &rhs : Right hand side of the `=` sign.
+	 * \param const vector::iterator &rhs : Right hand side of the `=` sign.
 	 */
 	template <class T>
-	typename Vector<T>::iterator &Vector<T>::iterator::operator=(
-			const Vector::iterator &rhs )
+	typename vector<T>::iterator &vector<T>::iterator::operator=(
+			const vector::iterator &rhs )
 	{
 		this->m_ptr = rhs.m_ptr;
 	}
 
 	/*!
 	 * \brief Operator `==` overload function
-	 * \param const Vector::iterator &rhs : Right hand side of the `==` sign.
+	 * \param const vector::iterator &rhs : Right hand side of the `==` sign.
 	 */
 	template <class T>
-	bool Vector<T>::iterator::operator==( const Vector::iterator &rhs ) const{
+	bool vector<T>::iterator::operator==( const vector::iterator &rhs ) const{
 		return this->m_ptr == rhs.m_ptr;
 	}
 
 	/*!
 	 * \brief Operator `!=` overload function
-	 * \param const Vector::iterator &rhs : Right hand side of the `!=` sign.
+	 * \param const vector::iterator &rhs : Right hand side of the `!=` sign.
 	 */
 	template <class T>
-	bool Vector<T>::iterator::operator!=( const Vector::iterator &rhs ) const{
+	bool vector<T>::iterator::operator!=( const vector::iterator &rhs ) const{
 		return this->m_ptr != rhs.m_ptr;
 	}
 
@@ -758,7 +773,7 @@ namespace sc
 	 * \brief Operator `*` overload function
 	 */
 	template <class T>
-	T &Vector<T>::iterator::operator*( void ) const{
+	T &vector<T>::iterator::operator*( void ) const{
 		return *this->m_ptr;
 	}
 
@@ -766,7 +781,7 @@ namespace sc
 	 * \brief Operator `++` overload function
 	 */
 	template <class T>
-	typename Vector<T>::iterator Vector<T>::iterator::operator++( void ){
+	typename vector<T>::iterator vector<T>::iterator::operator++( void ){
 		// ++it
 		return ++this->m_ptr;
 	}
@@ -774,7 +789,7 @@ namespace sc
 	 * \brief Operator `-` overload function
 	 */
 	template <class T>
-	typename Vector<T>::iterator Vector<T>::iterator::operator-(int a ){
+	typename vector<T>::iterator vector<T>::iterator::operator-(int a ){
 		// ++it
 		return this->m_ptr-a;
 	}
@@ -783,7 +798,7 @@ namespace sc
 	 * \brief Operator `-` overload function for ptr_diff
 	 */
 	template <class T>
-	int Vector<T>::iterator::operator-(iterator rhs ){
+	int vector<T>::iterator::operator-(iterator rhs ){
 		return this->m_ptr-rhs.m_ptr;
 	}
 
@@ -791,7 +806,7 @@ namespace sc
 	 * \brief Operator `+` overload function
 	 */
 	template <class T>
-	typename Vector<T>::iterator Vector<T>::iterator::operator+(int a ){
+	typename vector<T>::iterator vector<T>::iterator::operator+(int a ){
 		// ++it
 		return this->m_ptr+a;
 	}
@@ -800,7 +815,7 @@ namespace sc
 	 * \param int : The object itself
 	 */
 	template <class T>
-	typename Vector<T>::iterator Vector<T>::iterator::operator++( int ){
+	typename vector<T>::iterator vector<T>::iterator::operator++( int ){
 		// it++
 		return this->m_ptr++;
 	}
@@ -809,7 +824,7 @@ namespace sc
 	 * \brief Operator `--` overload function
 	 */
 	template <class T>
-	typename Vector<T>::iterator Vector<T>::iterator::operator--( void ){
+	typename vector<T>::iterator vector<T>::iterator::operator--( void ){
 		// --it
 		return --this->m_ptr;
 	}
@@ -819,7 +834,7 @@ namespace sc
 	 * \param int : The object itself
 	 */
 	template <class T>
-	typename Vector<T>::iterator Vector<T>::iterator::operator--( int ){
+	typename vector<T>::iterator vector<T>::iterator::operator--( int ){
 		// it--
 		return this->m_ptr--;
 	}
@@ -834,52 +849,52 @@ namespace sc
 	 * iterator.
 	 */
 	template <class T>
-	Vector<T>::const_iterator::const_iterator( T *ptr ){
+	vector<T>::const_iterator::const_iterator( T *ptr ){
 		this->m_ptr = ptr;
 	}
 
 	/*!
 	 * \brief Alternative constructor, that recieves another const_iterator.
-	 * \param const Vector<U>::const_iterator &itr : Another const_iterator from Vector<U>.
+	 * \param const vector<U>::const_iterator &itr : Another const_iterator from vector<U>.
 	 */
 	template <class U>
-	Vector<U>::const_iterator::const_iterator( const Vector<U>::const_iterator &itr ){
+	vector<U>::const_iterator::const_iterator( const vector<U>::const_iterator &itr ){
 		this->m_ptr = itr.m_ptr;
-		std::cout << "Vector<U>::const_iterator::const_iterator( itr ) created.\n";
+		std::cout << "vector<U>::const_iterator::const_iterator( itr ) created.\n";
 	}
 
 	/*!
 	 * \brief Default const_iterator destructor
 	 */
 	template <class U>
-	Vector<U>::const_iterator::~const_iterator() = default;
+	vector<U>::const_iterator::~const_iterator() = default;
 
 	/*!
 	 * \brief Operator `=` overload function
-	 * \param const Vector::const_iterator &rhs : Right hand side of the `=` sign.
+	 * \param const vector::const_iterator &rhs : Right hand side of the `=` sign.
 	 */
 	template <class T>
-	typename Vector<T>::const_iterator &Vector<T>::const_iterator::operator=(
-			const Vector::const_iterator &rhs )
+	typename vector<T>::const_iterator &vector<T>::const_iterator::operator=(
+			const vector::const_iterator &rhs )
 	{
 		this->m_ptr = rhs.m_ptr;
 	}
 
 	/*!
 	 * \brief Operator `==` overload function
-	 * \param const Vector::const_iterator &rhs : Right hand side of the `==` sign.
+	 * \param const vector::const_iterator &rhs : Right hand side of the `==` sign.
 	 */
 	template <class T>
-	bool Vector<T>::const_iterator::operator==( const Vector::const_iterator &rhs ) const{
+	bool vector<T>::const_iterator::operator==( const vector::const_iterator &rhs ) const{
 		return this->m_ptr == rhs.m_ptr;
 	}
 
 	/*!
 	 * \brief Operator `!=` overload function
-	 * \param const Vector::const_iterator &rhs : Right hand side of the `!=` sign.
+	 * \param const vector::const_iterator &rhs : Right hand side of the `!=` sign.
 	 */
 	template <class T>
-	bool Vector<T>::const_iterator::operator!=( const Vector::const_iterator &rhs ) const{
+	bool vector<T>::const_iterator::operator!=( const vector::const_iterator &rhs ) const{
 		return this->m_ptr != rhs.m_ptr;
 	}
 
@@ -887,7 +902,7 @@ namespace sc
 	 * \brief Operator `*` overload function
 	 */
 	template <class T>
-	const T &Vector<T>::const_iterator::operator*( void ) const{
+	const T &vector<T>::const_iterator::operator*( void ) const{
 		return *this->m_ptr;
 	}
 
@@ -895,7 +910,7 @@ namespace sc
 	 * \brief Operator `++` overload function
 	 */
 	template <class T>
-	typename Vector<T>::const_iterator Vector<T>::const_iterator::operator++( void ){
+	typename vector<T>::const_iterator vector<T>::const_iterator::operator++( void ){
 		// ++it
 		return ++this->m_ptr;
 	}
@@ -903,7 +918,7 @@ namespace sc
 	 * \brief Operator `-` overload function
 	 */
 	template <class T>
-	typename Vector<T>::const_iterator Vector<T>::const_iterator::operator-(int a ){
+	typename vector<T>::const_iterator vector<T>::const_iterator::operator-(int a ){
 		// ++it
 		return this->m_ptr-a;
 	}
@@ -912,7 +927,7 @@ namespace sc
 	 * \brief Operator `-` overload function for ptr_diff
 	 */
 	template <class T>
-	int Vector<T>::const_iterator::operator-(const_iterator rhs ){
+	int vector<T>::const_iterator::operator-(const_iterator rhs ){
 		return this->m_ptr-rhs.m_ptr;
 	}
 
@@ -920,7 +935,7 @@ namespace sc
 	 * \brief Operator `+` overload function
 	 */
 	template <class T>
-	typename Vector<T>::const_iterator Vector<T>::const_iterator::operator+(int a ){
+	typename vector<T>::const_iterator vector<T>::const_iterator::operator+(int a ){
 		// ++it
 		return this->m_ptr+a;
 	}
@@ -929,7 +944,7 @@ namespace sc
 	 * \param int : The object itself
 	 */
 	template <class T>
-	typename Vector<T>::const_iterator Vector<T>::const_iterator::operator++( int ){
+	typename vector<T>::const_iterator vector<T>::const_iterator::operator++( int ){
 		// it++
 		return this->m_ptr++;
 	}
@@ -938,7 +953,7 @@ namespace sc
 	 * \brief Operator `--` overload function
 	 */
 	template <class T>
-	typename Vector<T>::const_iterator Vector<T>::const_iterator::operator--( void ){
+	typename vector<T>::const_iterator vector<T>::const_iterator::operator--( void ){
 		// --it
 		return --this->m_ptr;
 	}
@@ -948,7 +963,7 @@ namespace sc
 	 * \param int : The object itself
 	 */
 	template <class T>
-	typename Vector<T>::const_iterator Vector<T>::const_iterator::operator--( int ){
+	typename vector<T>::const_iterator vector<T>::const_iterator::operator--( int ){
 		// it--
 		return this->m_ptr--;
 	}

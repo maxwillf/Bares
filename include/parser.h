@@ -3,7 +3,7 @@
 
 #include <iostream> // cout, cin
 #include <iterator> // std::distance()
-#include <vector>   // std::vector
+#include <vector>   // sc::vector
 #include <sstream>  // std::istringstream
 #include <cstddef>  // std::ptrdiff_t
 #include <limits>   // std::numeric_limits, para validar a faixa de um inteiro.
@@ -66,7 +66,7 @@ class Parser
         /// Parses and tokenizes an input source expression.  Return the result as a struct.
         ResultType parse( std::string e_ );
         /// Retrieves the list of tokens created during the partins process.
-        std::vector< Token > get_tokens( void ) const;
+        sc::vector< Token > get_tokens( void ) const;
 
         //==== Special methods
         /// Default constructor
@@ -96,7 +96,7 @@ class Parser
         //==== Private members.
         std::string expr;                //!< The source expression to be parsed
         std::string::iterator it_curr_symb; //!< Pointer to the current char inside the expression.
-        std::vector< Token > token_list; //!< Resulting list of tokens extracted from the expression.
+        sc::vector< Token > token_list; //!< Resulting list of tokens extracted from the expression.
 
         terminal_symbol_t lexer( char c_ ) const;
         //std::string token_str( terminal_symbol_t s_ ) const;

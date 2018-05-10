@@ -11,7 +11,6 @@
  *	\file	vector.hpp
  *	\author	Felipe Ramos & Max William
  */
-
 using size_type = size_t; 
 
 /*!
@@ -20,8 +19,13 @@ using size_type = size_t;
 
 namespace sc
 {
+
+template<class InputIt, class OutputIt>
+OutputIt copy(InputIt first, InputIt last, 
+              OutputIt d_first);
+
 	template <class T>
-	class Vector{
+	class vector{
 	private:
 		T *m_first;					// an 'first' pointer
 		T *m_last;					// an 'last' pointer
@@ -108,19 +112,19 @@ namespace sc
 		/*}}}*/
 
 		/* Iterator methods {{{*/
-		typename Vector<T>::iterator begin();
-		typename Vector<T>::iterator end();
-		typename Vector<T>::const_iterator cbegin() const;
-		typename Vector<T>::const_iterator cend() const;
+		typename vector<T>::iterator begin();
+		typename vector<T>::iterator end();
+		typename vector<T>::const_iterator cbegin() const;
+		typename vector<T>::const_iterator cend() const;
 		/*}}}*/
 
 		/* Special functions {{{*/
-		Vector( void );							// Default constructor
-		explicit Vector( size_type count );		// Allocate and set to a default
-		Vector( T *first, T *last );			// Copy a array into Vector Obj
-		Vector( const Vector &other );			// Makes a deep copy of &other
-		Vector( std::initializer_list<T> ilist ); // Create a Vector by iList
-		~Vector();								// Default destructor
+		vector( void );							// Default constructor
+		explicit vector( size_type count );		// Allocate and set to a default
+		vector( T *first, T *last );			// Copy a array into vector Obj
+		vector( const vector &other );			// Makes a deep copy of &other
+		vector( std::initializer_list<T> ilist ); // Create a vector by iList
+		~vector();								// Default destructor
 		/*}}}*/
 
 		/* Capacity functions {{{*/
@@ -164,16 +168,16 @@ namespace sc
 
 		/* Operator functions {{{*/
 		// Copy content from another object
-		Vector &operator=( const Vector & );
+		vector &operator=( const vector & );
 
 		// Check syntax
-		Vector &operator=( std::initializer_list<T> ilist );
+		vector &operator=( std::initializer_list<T> ilist );
 
-		// Checks if Vector1 == Vector2
-		bool operator==( const Vector & );
+		// Checks if vector1 == vector2
+		bool operator==( const vector & );
 
-		// Checks if Vector1 != Vector2
-		bool operator!=( const Vector & );  
+		// Checks if vector1 != vector2
+		bool operator!=( const vector & );  
 
 		// Access [pos] element by doing object[pos]
 		T &operator[]( size_type );	 		

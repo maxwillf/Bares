@@ -130,7 +130,7 @@ Parser::ResultType Parser::expression()
 		while(not end_input() and result.type == ResultType::OK ){
 			if(is_operator(*it_curr_symb)){
     	    	std::string token_str;
-    	    	std::copy( it_curr_symb, it_curr_symb+1, std::back_inserter( token_str ) );
+    	    	sc::copy( it_curr_symb, it_curr_symb+1, std::back_inserter( token_str ) );
 				accept(lexer(*it_curr_symb));
     	    	
 				token_list.push_back( Token( token_str, Token::token_t::OPERATOR ) );
@@ -172,7 +172,7 @@ Parser::ResultType Parser::term()
     // Copiar a substring correspondente para uma variável string.
 	std::string token_str;
 	if(lexer(*it_curr_symb) == terminal_symbol_t::TS_OPENING_P){
-		std::copy( it_curr_symb, it_curr_symb+1, std::back_inserter( token_str ) );
+		sc::copy( it_curr_symb, it_curr_symb+1, std::back_inserter( token_str ) );
 		accept(lexer(*it_curr_symb));
 
 		token_list.push_back( Token( token_str, Token::token_t::OPERATOR ) );
@@ -184,7 +184,7 @@ Parser::ResultType Parser::term()
 		skip_ws();
 
 		if(lexer(*it_curr_symb) == terminal_symbol_t::TS_CLOSING_P){
-			std::copy( it_curr_symb, it_curr_symb+1, std::back_inserter( token_str ) );
+			sc::copy( it_curr_symb, it_curr_symb+1, std::back_inserter( token_str ) );
 			accept(lexer(*it_curr_symb));
 
 			token_list.push_back( Token( token_str, Token::token_t::OPERATOR ) );
@@ -194,7 +194,7 @@ Parser::ResultType Parser::term()
                                std::distance( expr.begin(), begin_token ) );
 	}
 	/*if(lexer(*it_curr_symb) == terminal_symbol_t::TS_CLOSING_P){
-		std::copy( it_curr_symb, it_curr_symb+1, std::back_inserter( token_str ) );
+		sc::copy( it_curr_symb, it_curr_symb+1, std::back_inserter( token_str ) );
 		accept(lexer(*it_curr_symb));
 
 		token_list.push_back( Token( token_str, Token::token_t::OPERATOR ) );
@@ -207,7 +207,7 @@ Parser::ResultType Parser::term()
     // Vamos tokenizar o inteiro, se ele for bem formado.
     if ( result.type == ResultType::OK )
     {
-        std::copy( begin_token, it_curr_symb, std::back_inserter( token_str ) );
+        sc::copy( begin_token, it_curr_symb, std::back_inserter( token_str ) );
         // Tentar realizar a conversão de string para inteiro (usar stoll()).
         input_int_type token_int;
 		
@@ -369,7 +369,7 @@ Parser::ResultType  Parser::parse( std::string e_ )
 
 
 /// Return the list of tokens, which is the by-product created during the syntax analysis.
-std::vector< Token >
+sc::vector< Token >
 Parser::get_tokens( void ) const
 {
     return token_list;

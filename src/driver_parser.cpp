@@ -5,7 +5,7 @@
 #include <cassert>
 #include "../include/parser.h"
 #define debug false
-std::vector<std::string> expressions =
+sc::vector<std::string> expressions =
 {
     "10",
     "    12    +    4   8",
@@ -59,9 +59,9 @@ void print_error_msg( const Parser::ResultType & result, std::string str )
     std::cout << " " << error_indicator << std::endl;
 }
 
-std::vector<Token> infix_to_postfix(std::vector < Token > lista)
+sc::vector<Token> infix_to_postfix(sc::vector < Token > lista)
 {
-	std::vector <Token> posfix;
+	sc::vector <Token> posfix;
 	sc::stack <Token> s;
 
 	for (const auto &c : lista) {
@@ -126,7 +126,7 @@ int execute_operator(int op1, int op2, char c)
 	}
 }
 
-int evaluate_postfix(std::vector <Token> postfix)
+int evaluate_postfix(sc::vector <Token> postfix)
 {
 	sc::stack<int> s;
 	/*	while(not postfix.empty()){
@@ -176,11 +176,11 @@ int main()
          // Recuperar a lista de tokens.
         auto lista = my_parser.get_tokens();
         std::cout << ">>> Tokens: { ";
-        std::copy( lista.begin(), lista.end(),
+        sc::copy( lista.begin(), lista.end(),
                 std::ostream_iterator< Token >(std::cout, " ") );
         std::cout << "}\n";
 		if(result.type != Parser::ResultType::OK) continue;
-		std::vector<Token> postfix = infix_to_postfix(lista);
+		sc::vector<Token> postfix = infix_to_postfix(lista);
 		std::cout << "Resultado: " <<	evaluate_postfix(postfix) << std::endl;
     }
 
