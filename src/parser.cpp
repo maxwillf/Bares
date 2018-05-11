@@ -5,7 +5,7 @@
 //// finds if current symbol is an operator
 bool Parser::is_operator(char c)
 {
-	return std::string("^*/%+=()-").find(c) != std::string::npos; 
+	return std::string("^*/%+=-").find(c) != std::string::npos; 
 }
 
 
@@ -121,13 +121,14 @@ Parser::ResultType Parser::expression()
 {
     ResultType result;
 	result = term();
-    if ( result.type == ResultType::OK ){
+    if ( result.type == ResultType::OK){ 
 	
 		skip_ws();
 		if(end_input()){
 			return result;
 		}
 		while(not end_input() and result.type == ResultType::OK ){
+			skip_ws();
 			if(is_operator(*it_curr_symb)){
     	    	std::string token_str;
     	    	sc::copy( it_curr_symb, it_curr_symb+1, std::back_inserter( token_str ) );
@@ -136,7 +137,7 @@ Parser::ResultType Parser::expression()
 				token_list.push_back( Token( token_str, Token::token_t::OPERATOR ) );
 			}
 			else{
-            
+           		//std::cout << "Saiu no expr " << std::endl; 
 				return ResultType( ResultType::EXTRANEOUS_SYMBOL, 
                                std::distance( expr.begin(), it_curr_symb ) );
 			}
@@ -144,6 +145,9 @@ Parser::ResultType Parser::expression()
 			skip_ws();
 			result = term();
 			if(result.type != ResultType::OK) return result;
+			if(lexer(*it_curr_symb) == terminal_symbol_t::TS_CLOSING_P){
+				break;
+			}
 			skip_ws();
 		}
 	}
@@ -184,23 +188,17 @@ Parser::ResultType Parser::term()
 		skip_ws();
 
 		if(lexer(*it_curr_symb) == terminal_symbol_t::TS_CLOSING_P){
+			token_str.clear();
 			sc::copy( it_curr_symb, it_curr_symb+1, std::back_inserter( token_str ) );
 			accept(lexer(*it_curr_symb));
 
 			token_list.push_back( Token( token_str, Token::token_t::OPERATOR ) );
-			return result;
+			return ResultType (ResultType::OK);
 		}
-		else return ResultType (ResultType::EXTRANEOUS_SYMBOL,
-                               std::distance( expr.begin(), begin_token ) );
+		
+		else return ResultType (ResultType::MISSING_TERM,
+                               std::distance( expr.begin(), it_curr_symb ) );
 	}
-	/*if(lexer(*it_curr_symb) == terminal_symbol_t::TS_CLOSING_P){
-		sc::copy( it_curr_symb, it_curr_symb+1, std::back_inserter( token_str ) );
-		accept(lexer(*it_curr_symb));
-
-		token_list.push_back( Token( token_str, Token::token_t::OPERATOR ) );
-		return ResultType (ResultType::OK);
-
-	}*/
 
     // Processe um inteiro.
     result =  integer();
@@ -248,6 +246,7 @@ Parser::ResultType Parser::term()
  */
 Parser::ResultType Parser::integer()
 {
+
     // Se aceitarmos um zero, então o inteiro acabou aqui.
     if ( accept( terminal_symbol_t::TS_ZERO ) )
         return ResultType( ResultType::OK );
@@ -273,9 +272,10 @@ Parser::ResultType Parser::natural_number()
 	if(lexer(*it_curr_symb) == terminal_symbol_t::TS_CLOSING_P)
 		return ResultType(ResultType::OK);
     // Tem que vir um número que não seja zero! (de acordo com a definição).
-    if ( not digit_excl_zero() )
+    if ( not digit_excl_zero() ){
+	//	std::cout << "Saiu no natural_number" << std::endl;
         return ResultType( ResultType::ILL_FORMED_INTEGER, std::distance( expr.begin(), it_curr_symb ) ) ;
-
+	}
     // Cosumir os demais dígitos, se existirem...
     while( digit() ) /* empty */ ;
     return ResultType( ResultType::OK );
