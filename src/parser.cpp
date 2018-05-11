@@ -5,7 +5,7 @@
 //// finds if current symbol is an operator
 bool Parser::is_operator(char c)
 {
-	return std::string("^*/%+=-").find(c) != std::string::npos; 
+	return std::string("^*/%+-").find(c) != std::string::npos; 
 }
 
 

@@ -7,6 +7,24 @@
 #define debug false
 sc::vector<std::string> expressions =
 {
+"10000000 - 2",
+"2+          ",
+"3 * d       ",
+"2 = 3       ",
+"2.3 + 4     ",
+"2 * 3 4     ",
+"2 ** 3      ",
+"%5 * 10     ",
+"*5 * 10     ",
+"(2+3)*/(1-4)",
+"(-3*4)(10*5)",
+"2 - 4)      ",
+"2) - 4      ",
+")2 - 4      ",
+"((2%3) * 8  ",
+//"3/(1-1)     ",
+//"10/(3*3^-2) ",
+"20*20000    ",
     "10",
     "    12    +    4   8",
     "32767 - 32768 + 3",
@@ -24,7 +42,13 @@ sc::vector<std::string> expressions =
 	" 7 ^3 +2", 
 	" 3+(5+2) ",
 	"(2*3+(5-2))",
-	"(2*3+(5-2)"
+	"(2*3+(5-2)",
+"25 / 5+4 *8",
+"(2+3) * 8",
+"5 % 2 ^4",
+"(5 % 3) ^4",
+"-----3",
+"2^3^2"
 };
 
 void print_error_msg( const Parser::ResultType & result, std::string str )
@@ -36,19 +60,19 @@ void print_error_msg( const Parser::ResultType & result, std::string str )
     switch ( result.type )
     {
         case Parser::ResultType::UNEXPECTED_END_OF_EXPRESSION:
-            std::cout << ">>> Unexpected end of input at column (" << result.at_col << ")!\n";
+            std::cout << ">>> Unexpected end of input at column (" << result.at_col+1 << ")!\n";
             break;
         case Parser::ResultType::ILL_FORMED_INTEGER:
-            std::cout << ">>> Ill formed integer at column (" << result.at_col << ")!\n";
+            std::cout << ">>> Ill formed integer at column (" << result.at_col+1 << ")!\n";
             break;
         case Parser::ResultType::MISSING_TERM:
-            std::cout << ">>> Missing <term> at column (" << result.at_col << ")!\n";
+            std::cout << ">>> Missing <term> at column (" << result.at_col+1 << ")!\n";
             break;
         case Parser::ResultType::EXTRANEOUS_SYMBOL:
-            std::cout << ">>> Extraneous symbol after valid expression found at column (" << result.at_col << ")!\n";
+            std::cout << ">>> Extraneous symbol after valid expression found at column (" << result.at_col+1 << ")!\n";
             break;
         case Parser::ResultType::INTEGER_OUT_OF_RANGE:
-            std::cout << ">>> Integer constant out of range beginning at column (" << result.at_col << ")!\n";
+            std::cout << ">>> Integer constant out of range beginning at column (" << result.at_col+1 << ")!\n";
             break;
         default:
             std::cout << ">>> Unhandled error found!\n";
@@ -82,7 +106,8 @@ sc::vector<Token> infix_to_postfix(sc::vector < Token > lista)
 		}
 		else if ( c.type == Token::token_t::OPERATOR) {
 		std::cout << "Operator: " << c.value << " Precendence: " << c.precedence << std::endl;
-			while(not s.empty() and (s.top().precedence >= c.precedence)){
+			while(not s.empty() and (s.top().precedence >= c.precedence)
+					and s.top().precedence < 3){ //op1 != ^
 					
 			posfix.push_back( s.top());
 			s.pop();
@@ -120,7 +145,7 @@ int execute_operator(int op1, int op2, char c)
 					  return op1%op2;
 		case '+' : return op1+op2;
 		case '-' : return op1-op2;
-//		default  : assert( false );
+		default  : assert( false );
 
 
 	}
@@ -181,7 +206,16 @@ int main()
         std::cout << "}\n";
 		if(result.type != Parser::ResultType::OK) continue;
 		sc::vector<Token> postfix = infix_to_postfix(lista);
-		std::cout << "Resultado: " <<	evaluate_postfix(postfix) << std::endl;
+	
+		long op_result = evaluate_postfix(postfix);
+	
+		if(op_result > 32767 or op_result < -32768){
+			std::cout << "Numeric overflow error!" << std::endl;
+		}
+		
+		else{
+			std::cout << "Resultado: " << op_result << std::endl;
+		}
     }
 
 
