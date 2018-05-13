@@ -61,4 +61,4 @@ make
 For running Bares execute it like this:
 ```
 ./bares input_file [output_file]
-
+```
