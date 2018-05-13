@@ -1,4 +1,4 @@
-Target = parser
+Target = bares
 INCLUDES = include
 CXX = g++
 CXXFLAGS = -std=c++11 -g -ggdb -I $(INCLUDES)

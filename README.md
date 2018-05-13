@@ -16,7 +16,7 @@ Information on **recursive descendent parsing** may be found [here](https://en.w
 The gramar we want to parse represents arithmetic expressions with addition and subtraction of integers.
 
     <expr>            := <term>,{ ("+"|"-"),<term> };
-    <term>            := <integer>;
+    <term>            := "(",<expr>,")" | <integer>;
     <integer>         := 0 | ["-"],<natural_number>;
     <natural_number>  := <digit_excl_zero>,{<digit>};
     <digit_excl_zero> := "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9";
@@ -29,13 +29,36 @@ This grammar _accepts_ expressions like:
 * "-21 +     -18"
 * " -54"
 * "-21 - 23 + 1234"
+* (2+3) * 8
+* 5 % 2 ^4
+* (5 % 3) ^4
 
 And _rejects_ expressions like:
 
+* 2+
+* 3 * d
+* 2 = 3
+* 2.3 + 4
 * "01 + 3"
 * " - 3 + 4"
 * "2 +"
 * "  "
 * "+2 + 5"
 * "-02 + 4"
+* )2 - 4
+* ((2%3) * 8
+* 3/(1-1)
+
+# Usage
+
+You will need at least g++ C11 compiler and GNU makefile
+
+to build it simply run:
+```
+make
+```
+
+For running Bares execute it like this:
+```
+./bares input_file [output_file]
 
