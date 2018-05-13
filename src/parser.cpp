@@ -137,7 +137,6 @@ Parser::ResultType Parser::expression()
 				token_list.push_back( Token( token_str, Token::token_t::OPERATOR ) );
 			}
 			else{
-           		//std::cout << "Saiu no expr " << std::endl; 
 				return ResultType( ResultType::EXTRANEOUS_SYMBOL, 
                                std::distance( expr.begin(), it_curr_symb ) );
 			}
@@ -214,7 +213,6 @@ Parser::ResultType Parser::term()
 	
         catch( const std::invalid_argument & e )
         {
-			std::cout << "SAIU AQUI" << std::endl;
             return ResultType( ResultType::ILL_FORMED_INTEGER, 
                                std::distance( expr.begin(), begin_token ) );
         }
@@ -273,7 +271,6 @@ Parser::ResultType Parser::natural_number()
 		return ResultType(ResultType::OK);
     // Tem que vir um número que não seja zero! (de acordo com a definição).
     if ( not digit_excl_zero() ){
-	//	std::cout << "Saiu no natural_number" << std::endl;
         return ResultType( ResultType::ILL_FORMED_INTEGER, std::distance( expr.begin(), it_curr_symb ) ) ;
 	}
     // Cosumir os demais dígitos, se existirem...

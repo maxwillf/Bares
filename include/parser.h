@@ -3,7 +3,6 @@
 
 #include <iostream> // cout, cin
 #include <iterator> // std::distance()
-#include <vector>   // sc::vector
 #include <sstream>  // std::istringstream
 #include <cstddef>  // std::ptrdiff_t
 #include <limits>   // std::numeric_limits, para validar a faixa de um inteiro.

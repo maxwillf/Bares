@@ -1,57 +1,13 @@
 #include <iostream>
 #include <iomanip>
-#include <vector>
+#include <fstream>
 #include "pilha.hpp"
 #include <cassert>
 #include "../include/parser.h"
 #define debug false
-sc::vector<std::string> expressions =
-{
-"10000000 - 2",
-"2+          ",
-"3 * d       ",
-"2 = 3       ",
-"2.3 + 4     ",
-"2 * 3 4     ",
-"2 ** 3      ",
-"%5 * 10     ",
-"*5 * 10     ",
-"(2+3)*/(1-4)",
-"(-3*4)(10*5)",
-"2 - 4)      ",
-"2) - 4      ",
-")2 - 4      ",
-"((2%3) * 8  ",
-//"3/(1-1)     ",
-//"10/(3*3^-2) ",
-"20*20000    ",
-    "10",
-    "    12    +    4   8",
-    "32767 - 32768 + 3",
-    "5 + -32766",
-    "5 + -32769",
-    "12 + 3",
-    "-3+-5+-6",
-    "12 + 3     -3 + -34 ",
-    "+12",
-    "1.3 * 4",
-    "a + 4",
-    "       ",
-    "  123 *  548",
-	"5 / 2 " ,
-	" 7 ^3 +2", 
-	" 3+(5+2) ",
-	"(2*3+(5-2))",
-	"(2*3+(5-2)",
-"25 / 5+4 *8",
-"(2+3) * 8",
-"5 % 2 ^4",
-"(5 % 3) ^4",
-"-----3",
-"2^3^2"
-};
 
-void print_error_msg( const Parser::ResultType & result, std::string str )
+void print_error_msg( const Parser::ResultType & result,
+		std::string str)
 {
     std::string error_indicator( str.size()+1, ' ');
 
@@ -78,9 +34,39 @@ void print_error_msg( const Parser::ResultType & result, std::string str )
             std::cout << ">>> Unhandled error found!\n";
             break;
     }
+		std::cout << "\"" << str << "\"\n";
+		std::cout << " " << error_indicator << std::endl;
+	
+}
+void print_error_msg( const Parser::ResultType & result,
+		std::string str,std::ostream &out)
+{
+    std::string error_indicator( str.size()+1, ' ');
 
-    std::cout << "\"" << str << "\"\n";
-    std::cout << " " << error_indicator << std::endl;
+    // Have we got a parsing error?
+    error_indicator[result.at_col] = '^';
+    switch ( result.type )
+    {
+        case Parser::ResultType::UNEXPECTED_END_OF_EXPRESSION:
+            out << "Unexpected end of input at column (" << result.at_col+1 << ")!\n";
+            break;
+        case Parser::ResultType::ILL_FORMED_INTEGER:
+            out << "Ill formed integer at column (" << result.at_col+1 << ")!\n";
+            break;
+        case Parser::ResultType::MISSING_TERM:
+            out << "Missing <term> at column (" << result.at_col+1 << ")!\n";
+            break;
+        case Parser::ResultType::EXTRANEOUS_SYMBOL:
+            out << "Extraneous symbol after valid expression found at column (" << result.at_col+1 << ")!\n";
+            break;
+        case Parser::ResultType::INTEGER_OUT_OF_RANGE:
+            out << "Integer constant out of range beginning at column (" << result.at_col+1 << ")!\n";
+            break;
+        default:
+            out << "Unhandled error found!\n";
+            break;
+    }
+	
 }
 
 sc::vector<Token> infix_to_postfix(sc::vector < Token > lista)
@@ -139,9 +125,9 @@ int execute_operator(int op1, int op2, char c)
 	{
 		case '^': return pow(op1,op2);
 		case '*': return op1*op2;
-		case '/': if (op2 == 0) throw std::runtime_error("Division by zero");
+		case '/': if (op2 == 0) throw std::runtime_error("Division by zero!");
 					  return op1/op2;
-		case '%': if (op2 == 0) throw std::runtime_error("Division by zero");
+		case '%': if (op2 == 0) throw std::runtime_error("Division by zero!");
 					  return op1%op2;
 		case '+' : return op1+op2;
 		case '-' : return op1-op2;
@@ -154,9 +140,6 @@ int execute_operator(int op1, int op2, char c)
 int evaluate_postfix(sc::vector <Token> postfix)
 {
 	sc::stack<int> s;
-	/*	while(not postfix.empty()){
-			std::cout << "Stack values(up to bottom) " <<  c.value << std::endl;
-			postfix.pop(); } */
 	int result = 0;
 	if(postfix.size() == 1) return std::stoll(postfix[0].value);
 	for(const auto & c: postfix)
@@ -180,12 +163,24 @@ int evaluate_postfix(sc::vector <Token> postfix)
 
 
 
-
-int main()
+int main(int argc, char *argv[])
 {
+	if(argc < 2 or argc > 3){
+		std::cout << "Please run the program like this:"
+			<< "./bares input_file [output_file]" << std::endl;	
+		return -1;
+	}
+	std::ifstream input(argv[1]);
+	std::ofstream output;
+	if(argc != 3){
+		output.open("output.txt");
+	}
+	else output.open(argv[2]);
+
     Parser my_parser; // Instancia um parser.
     // Tentar analisar cada expressão da lista.
-    for( const auto & expr : expressions )
+	std::string expr;
+	while(getline(input,expr))
     {
         // Fazer o parsing desta expressão.
         auto result = my_parser.parse( expr );
@@ -193,8 +188,11 @@ int main()
         std::cout << std::setfill('=') << std::setw(80) << "\n";
         std::cout << std::setfill(' ') << ">>> Parsing \"" << expr << "\"\n";
         // Se deu pau, imprimir a mensagem adequada.
-        if ( result.type != Parser::ResultType::OK )
+        if ( result.type != Parser::ResultType::OK ){
             print_error_msg( result, expr );
+            print_error_msg( result, expr,output );
+			continue;
+		}
         else
             std::cout << ">>> Expression SUCCESSFULLY parsed!\n";
 
@@ -204,17 +202,23 @@ int main()
         sc::copy( lista.begin(), lista.end(),
                 std::ostream_iterator< Token >(std::cout, " ") );
         std::cout << "}\n";
-		if(result.type != Parser::ResultType::OK) continue;
+		
+		
 		sc::vector<Token> postfix = infix_to_postfix(lista);
-	
-		long op_result = evaluate_postfix(postfix);
-	
+		long op_result;	
+		try{ op_result = evaluate_postfix(postfix);}
+		catch (std::runtime_error e){
+			std::cout << e.what() << " -> " << std::endl;
+			continue;
+		}
 		if(op_result > 32767 or op_result < -32768){
 			std::cout << "Numeric overflow error!" << std::endl;
+			continue;
 		}
 		
 		else{
 			std::cout << "Resultado: " << op_result << std::endl;
+			output << op_result << std::endl;
 		}
     }
 
