@@ -14,16 +14,18 @@
 using size_type = size_t; 
 
 /*!
- *	\brief	A class that stores all vector functions
+ *	\brief	A namespace that stores all vector and stack functions i made
  */
 
 namespace sc
-{
+{	/*! My version of std::copy because STL's required traits that my iterator
+	 *class doesn't have 
+	 */
 
-template<class InputIt, class OutputIt>
-OutputIt copy(InputIt first, InputIt last, 
-              OutputIt d_first);
-
+	template<class InputIt, class OutputIt>
+	OutputIt copy(InputIt first, InputIt last, 
+	              OutputIt d_first);
+	/*! A class alike STL's vector */
 	template <class T>
 	class vector{
 	private:

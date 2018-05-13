@@ -6,40 +6,13 @@
 #include "../include/parser.h"
 #define debug false
 
+/*! Function for printing error messages
+ * @params result
+ * @params str
+ * @params out The stream to which it should print the message
+ */
 void print_error_msg( const Parser::ResultType & result,
-		std::string str)
-{
-    std::string error_indicator( str.size()+1, ' ');
-
-    // Have we got a parsing error?
-    error_indicator[result.at_col] = '^';
-    switch ( result.type )
-    {
-        case Parser::ResultType::UNEXPECTED_END_OF_EXPRESSION:
-            std::cout << ">>> Unexpected end of input at column (" << result.at_col+1 << ")!\n";
-            break;
-        case Parser::ResultType::ILL_FORMED_INTEGER:
-            std::cout << ">>> Ill formed integer at column (" << result.at_col+1 << ")!\n";
-            break;
-        case Parser::ResultType::MISSING_TERM:
-            std::cout << ">>> Missing <term> at column (" << result.at_col+1 << ")!\n";
-            break;
-        case Parser::ResultType::EXTRANEOUS_SYMBOL:
-            std::cout << ">>> Extraneous symbol after valid expression found at column (" << result.at_col+1 << ")!\n";
-            break;
-        case Parser::ResultType::INTEGER_OUT_OF_RANGE:
-            std::cout << ">>> Integer constant out of range beginning at column (" << result.at_col+1 << ")!\n";
-            break;
-        default:
-            std::cout << ">>> Unhandled error found!\n";
-            break;
-    }
-		std::cout << "\"" << str << "\"\n";
-		std::cout << " " << error_indicator << std::endl;
-	
-}
-void print_error_msg( const Parser::ResultType & result,
-		std::string str,std::ostream &out)
+		std::string str, std::ostream &out = std::cout)
 {
     std::string error_indicator( str.size()+1, ' ');
 
@@ -66,9 +39,15 @@ void print_error_msg( const Parser::ResultType & result,
             out << "Unhandled error found!\n";
             break;
     }
-	
+	if(&out == &std::cout){
+		std::cout << "\"" << str << "\"\n";
+		std::cout << " " << error_indicator << std::endl;
+	}	
 }
 
+/*! Converts infix expressions to postfix
+ * @param lista
+ */
 sc::vector<Token> infix_to_postfix(sc::vector < Token > lista)
 {
 	sc::vector <Token> posfix;
@@ -119,6 +98,11 @@ sc::vector<Token> infix_to_postfix(sc::vector < Token > lista)
 
 	return posfix; 
 }
+/*! Performs operations on operands from the stack
+ * @params op1
+ * @params op2
+ * @params c
+ */
 int execute_operator(int op1, int op2, char c)
 {
 	switch( c )
@@ -137,6 +121,9 @@ int execute_operator(int op1, int op2, char c)
 	}
 }
 
+/*! Evaluates the postfix expression and returns it's result
+ * @params postfix
+ */
 int evaluate_postfix(sc::vector <Token> postfix)
 {
 	sc::stack<int> s;
@@ -172,6 +159,7 @@ int main(int argc, char *argv[])
 	}
 	std::ifstream input(argv[1]);
 	std::ofstream output;
+
 	if(argc != 3){
 		output.open("output.txt");
 	}
