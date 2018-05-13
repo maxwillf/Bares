@@ -159,7 +159,7 @@ Parser::ResultType Parser::expression()
  *
  * Production rule is:
  * ```
- *  <term> := <integer>;
+ *  <term> := "(",<expr>,")"| <integer>;
  * ```
  * A term is made of a single integer.
  *
