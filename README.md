@@ -5,7 +5,7 @@ multiplication, division, modular division and exponentiation operations.
 
 This programming project implements a simple parser for an EBNF (_Extended Backus-Naur Form_) grammar.
 
-It also uses my own vector implementation found [here].(https://github.com/maxwillf/tad-vector)
+It also uses my own vector implementation found [here](https://github.com/maxwillf/tad-vector).
 
 The objective Information on **EBNF grammar** may be found [here](https://en.wikipedia.org/wiki/Extended_Backus–Naur_Form).
 
