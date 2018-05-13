@@ -29,6 +29,9 @@ void print_error_msg( const Parser::ResultType & result,
         case Parser::ResultType::MISSING_TERM:
             out << "Missing <term> at column (" << result.at_col+1 << ")!\n";
             break;
+        case Parser::ResultType::MISSING_CLOSING_P:
+            out << "Missing closing \")\" at column (" << result.at_col+1 << ")!\n";
+            break;
         case Parser::ResultType::EXTRANEOUS_SYMBOL:
             out << "Extraneous symbol after valid expression found at column (" << result.at_col+1 << ")!\n";
             break;
@@ -196,7 +199,7 @@ int main(int argc, char *argv[])
 		long op_result;	
 		try{ op_result = evaluate_postfix(postfix);}
 		catch (std::runtime_error e){
-			std::cout << e.what() << " -> " << std::endl;
+			std::cout << e.what() << std::endl;
 			continue;
 		}
 		if(op_result > 32767 or op_result < -32768){

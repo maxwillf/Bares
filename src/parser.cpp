@@ -195,7 +195,7 @@ Parser::ResultType Parser::term()
 			return ResultType (ResultType::OK);
 		}
 		
-		else return ResultType (ResultType::MISSING_TERM,
+		else return ResultType (ResultType::MISSING_CLOSING_P,
                                std::distance( expr.begin(), it_curr_symb ) );
 	}
 

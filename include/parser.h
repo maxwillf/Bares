@@ -40,6 +40,7 @@ class Parser
                     UNEXPECTED_END_OF_EXPRESSION,
                     ILL_FORMED_INTEGER,
                     MISSING_TERM,
+                    MISSING_CLOSING_P,
                     EXTRANEOUS_SYMBOL,
                     INTEGER_OUT_OF_RANGE
             };
