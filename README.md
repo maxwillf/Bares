@@ -66,6 +66,9 @@ For running Bares execute it like this:
 ./bares input_file [output_file]
 ```
 
+If no output file is specified this program will write to "output.txt" by
+default
+
 # Authorship
 
 This Program was made by me, [Max William](https://github.com/maxwillf), as an

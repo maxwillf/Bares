@@ -216,8 +216,9 @@ int main(int argc, char *argv[])
     }
 
 
-
-    std::cout << "\n>>> Normal exiting...\n";
+    std::cout << "\n>>> Writing to output file before exiting...\n";
+    
+	std::cout << "\n>>> Normal exiting...\n";
 
     return EXIT_SUCCESS;
 }
