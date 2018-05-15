@@ -198,7 +198,18 @@ Parser::ResultType Parser::term()
 		else return ResultType (ResultType::MISSING_CLOSING_P,
                                std::distance( expr.begin(), it_curr_symb ) );
 	}
-
+	// Antes de processar um inteiro, vejamos se ele vem seguido por varios
+	// sinais de "-" unários
+	int minus = 0;
+	while(lexer(*it_curr_symb ) == terminal_symbol_t::TS_MINUS){
+		minus++;
+		next_symbol();
+	}
+	minus = minus % 2;
+	if(minus != 0){
+		begin_token = it_curr_symb-1;
+	}
+	else{ begin_token = it_curr_symb; }
     // Processe um inteiro.
     result =  integer();
     // Vamos tokenizar o inteiro, se ele for bem formado.
@@ -251,6 +262,7 @@ Parser::ResultType Parser::integer()
 
     // Vamos tentar aceitar o '-'.
     accept( terminal_symbol_t::TS_MINUS );
+	// The above line will be deprecated i think
     return  natural_number();
 }
 
