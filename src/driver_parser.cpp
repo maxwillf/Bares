@@ -1,7 +1,7 @@
 #include <iostream>
 #include <iomanip>
 #include <fstream>
-#include "pilha.hpp"
+#include "stack.hpp"
 #include <cassert>
 #include "../include/parser.h"
 #define debug false
