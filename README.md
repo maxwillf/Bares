@@ -1,7 +1,10 @@
 # Introduction
 
-Basic ARithmetic Expression Evaluator based on Stacks for addition, subtraction,
-multiplication, division, modular division and exponentiation operations.
+Basic ARithmetic Expression Evaluator based on Stacks
+
+This program supports:
++ Integers in a range from -32.786 to 32.767.
++ Common operators like +, -, /, *, ^ and %.
 
 This programming project implements a simple parser for an EBNF (_Extended Backus-Naur Form_) grammar.
 
@@ -62,3 +65,9 @@ For running Bares execute it like this:
 ```
 ./bares input_file [output_file]
 ```
+
+# Authorship
+
+This Program was made by me, [Max William](https://github.com/maxwillf), as an
+exercise for a programming languages course i'm taking in Computer Science 
+at [Universidade Federal do Rio Grande do Norte](https://ufrn.br).

@@ -200,10 +200,12 @@ int main(int argc, char *argv[])
 		try{ op_result = evaluate_postfix(postfix);}
 		catch (std::runtime_error e){
 			std::cout << e.what() << std::endl;
+			output << e.what() << std::endl;
 			continue;
 		}
 		if(op_result > 32767 or op_result < -32768){
 			std::cout << "Numeric overflow error!" << std::endl;
+			output << "Numeric overflow error!" << std::endl;
 			continue;
 		}
 		

@@ -143,7 +143,9 @@ Parser::ResultType Parser::expression()
 
 			skip_ws();
 			result = term();
-			if(result.type != ResultType::OK) return result;
+			if(result.type != ResultType::OK){
+				return result;
+			}
 			if(lexer(*it_curr_symb) == terminal_symbol_t::TS_CLOSING_P){
 				break;
 			}
@@ -171,6 +173,11 @@ Parser::ResultType Parser::term()
 	ResultType result;
     // Guarda o início do termo no input, para possíveis mensagens de erro.
     auto begin_token( it_curr_symb );
+	// Se
+	if(end_input()){
+				return ResultType( ResultType::MISSING_TERM,
+                               std::distance( expr.begin(), it_curr_symb ) );
+	}
 
     // Copiar a substring correspondente para uma variável string.
 	std::string token_str;
@@ -210,7 +217,8 @@ Parser::ResultType Parser::term()
 		begin_token = it_curr_symb-1;
 	}
 	else{ begin_token = it_curr_symb; }
-    // Processe um inteiro.
+    
+	// Processe um inteiro.
     result =  integer();
     // Vamos tokenizar o inteiro, se ele for bem formado.
     if ( result.type == ResultType::OK )
@@ -219,7 +227,6 @@ Parser::ResultType Parser::term()
         // Tentar realizar a conversão de string para inteiro (usar stoll()).
         input_int_type token_int;
 		
-		//input_int_type  teste;
         try { token_int = stoll( token_str );}
 	
         catch( const std::invalid_argument & e )
@@ -261,8 +268,6 @@ Parser::ResultType Parser::integer()
         return ResultType( ResultType::OK );
 
     // Vamos tentar aceitar o '-'.
-    accept( terminal_symbol_t::TS_MINUS );
-	// The above line will be deprecated i think
     return  natural_number();
 }
 

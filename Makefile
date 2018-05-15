@@ -10,7 +10,7 @@ HEADERS := $(wildcard $(INCLUDES) *.h)
 SOURCES := $(wildcard $(SRCDIR)/*.cpp)
 OBJECTS := $(SOURCES:$(SRCDIR)/%.cpp=$(OBJDIR)/%.o)
 
-all: project docs
+all: project # docs
 project: $(OBJECTS) 
 	@echo "Linkin Files: " $(OBJECTS) $(DRIVER)
 	@$(CXX) $(OBJECTS) $(DRIVER)  $(CXXFLAGS) -o $(Target)
