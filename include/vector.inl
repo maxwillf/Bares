@@ -9,6 +9,8 @@ namespace sc
 {
 /*!
  * @return d_first
+ * @params first
+ * @params last
  * */
 	template<class InputIt, class OutputIt>
 	OutputIt copy(InputIt first, InputIt last, 
@@ -25,7 +27,7 @@ namespace sc
 
 	/*!
 	 * \brief	Constructs the list with count default-inserted instances of T 	
-	 * \param 	size_type count : Number of elements that the vector will have
+	 * \param 	 count : Number of elements that the vector will have
 	 */
 	template <class T>
 	vector<T>::vector( size_type count ){
@@ -67,7 +69,7 @@ namespace sc
 
 	/*!
 	 * \brief 	Copy constructor, makes a *deep copy* of another vector object
-	 * \param 	const vector &other : Another vector object
+	 * \param 	other : Another vector object
 	 */
 	template <class T>
 	vector<T>::vector( const vector &other ){
@@ -93,7 +95,7 @@ namespace sc
 
 	/*!
 	 * \brief 	Constructor that takes a std::initializer_list as arg.
-	 * \param 	std::initializer_list ilist : Initializer list that will
+	 * \param 	ilist : Initializer list that will
 	 * 			turn into a vector
 	 */
 	template <class T>
@@ -121,8 +123,8 @@ namespace sc
 
 	/*!
 	 * \brief	Constructor that makes a copy from another simple array.
-	 * \param 	InputIt *first : First element from the array
-	 * \param 	InputIt *last : Last (stub) element from the array
+	 * \param 	*first : First element from the array
+	 * \param 	*last : Last (stub) element from the array
 	 */
 	template <class InputIt>
 	vector<InputIt>::vector( InputIt *first, InputIt *last ){
@@ -211,7 +213,7 @@ namespace sc
 	/* Modifiers Methods {{{*/
 	/*!
 	 * \brief 	Insert an element in the end of the sc::vector
-	 * \param 	const T& value : Value to be inserted on the list
+	 * \param 	value : Value to be inserted on the list
 	 */
 	template <class T>
 	void vector<T>::push_back( const T& value ){
@@ -230,7 +232,7 @@ namespace sc
 	/*! Adds an element to the front of the array */
 	/*!
 	 * \brief	Insert an element in the first position in the sc::vector
-	 * \param	const T& value : Value to be inserted on the list
+	 * \param	value : Value to be inserted on the list
 	 */
 	template <typename T>
 	void vector<T>::push_front(const T & value){
@@ -292,8 +294,8 @@ namespace sc
 
 	/*!
 	 * \brief 	Insert an defined number of terms on the sc::vector object
-	 * \param 	iterator pos : Position to start inserting elements
-	 * \param 	const T& value : Value to be inserted
+	 * \param 	pos : Position to start inserting elements
+	 * \param 	value : Value to be inserted
 	 */
 	template <typename T>
 	typename vector<T>::iterator vector<T>::insert
@@ -325,9 +327,9 @@ namespace sc
 
 	/*!
 	 * \brief 	Insert an defined number of terms on the sc::vector object
-	 * \param 	iterator pos : Position to start inserting elements
-	 * \param 	iterator first : First iterator that will be inserted
-	 * \param 	iterator last : Last iterator that will stop the insertion
+	 * \param 	 pos : Position to start inserting elements
+	 * \param 	 first : First iterator that will be inserted
+	 * \param 	 last : Last iterator that will stop the insertion
 	 */
 	template <typename T>
 	typename vector<T>::iterator vector<T>::insert
@@ -368,8 +370,8 @@ namespace sc
 
 	/*!
 	 * \brief 	Insert an defined number of terms on the sc::vector object
-	 * \param 	iterator pos : Position to start inserting elements
-	 * \param 	std::initializer_list<T> ilist : initializer_list object that
+	 * \param 	pos : Position to start inserting elements
+	 * \param 	ilist : initializer_list object that
 	 * 			will be inserted on the sc::vector
 	 */
 	template <typename T>
@@ -419,8 +421,8 @@ namespace sc
 
 	/*!
 	 * \brief 	Replaces the contents with count copies of pre-defined values
-	 * \param 	size_type count : How many times the const T &value will appear
-	 * \param 	const T &value : Value that will be inserted
+	 * \param 	count : How many times the const T &value will appear
+	 * \param 	value : Value that will be inserted
 	 */
 	template <typename T>
 	void vector<T>::assign(size_type count,  const T & value){
@@ -436,8 +438,8 @@ namespace sc
 
 	/*!
 	 * \brief 	Replaces the contents with count copies of pre-defined values
-	 * \param 	iterator first : First iterator element
-	 * \param 	iterator last : Last iterator element
+	 * \param 	first : First iterator element
+	 * \param 	last : Last iterator element
 	 */
 	template <typename T>
 	void vector<T>::assign(iterator first, iterator last){
@@ -453,7 +455,7 @@ namespace sc
 
 	/*!
 	 * \brief 	Replaces the contents with count copies of pre-defined values
-	 * \param 	std::initializer_list<T> ilist : initializer_list that will 
+	 * \param 	ilist : initializer_list that will 
 	 * 			populate the sc::vector object
 	 */
 	template <typename T>
@@ -489,7 +491,7 @@ namespace sc
 	/*!
 	 * \brief 	Removes from the sc::vector either a element or a range of
 	 * 			elements (first, last)
-	 * \param	iterator pos : The position of the element to be erased	
+	 * \param	pos : The position of the element to be erased	
 	 */
 	template <typename T>
 	typename vector<T>::iterator vector<T>::erase(iterator pos){
@@ -519,8 +521,8 @@ namespace sc
 	/*!
 	 * \brief 	Removes from the sc::vector either a element or a range of
 	 * 			elements (first, last)
-	 * \param	iterator first : First position iterator
-	 * \param	iterator last : Last position iterator
+	 * \param	first : First position iterator
+	 * \param	last : Last position iterator
 	 */
 	template <typename T>
 	typename vector<T>::iterator vector<T>::erase
@@ -558,7 +560,7 @@ namespace sc
 	
 	/*!
 	 * \brief Access element from a specified position
-	 * \param size_type pos : User defined position
+	 * \param  pos : User defined position
 	 * \return Element at defined position
 	 */
 	template <class T>
@@ -572,7 +574,7 @@ namespace sc
 
 	/*!
 	 * \brief 	sc::vector operator `[]` overload function
-	 * \param 	size_type pos : The desired position to access in elements[pos].
+	 * \param 	pos : The desired position to access in elements[pos].
 	 * \return 	The element at elements[pos].
 	 */
 	template <class T>
@@ -582,7 +584,7 @@ namespace sc
 
 	/*!
 	 * \brief	sc::vector operator `=` overload function
-	 * \param	const vector<T> &rhs : Right hand side object
+	 * \param	rhs : Right hand side object
 	 * \return	The right hand side object
 	 */
 	template <class T>
@@ -605,7 +607,7 @@ namespace sc
 	/*!
 	 * \brief	sc::vector operator '=' overload function that constructs the 
 	 * 			object following a std::initializer_list object.
-	 * \param 	std::initializer_list ilist : Initializer list object
+	 * \param 	ilist : Initializer list object
 	 */
 	template <class T>
 	vector<T> &vector<T>::operator=( std::initializer_list<T> ilist ){
@@ -635,7 +637,7 @@ namespace sc
 
 	/*!
 	 * \brief	sc::vector operator `==` overload function
-	 * \param	const vector<T> &rhs : Right hand side object
+	 * \param	rhs : Right hand side object
 	 * \return	bool value if the two objects are equal.
 	 * 			(true = 1, false = 0)
 	 */
@@ -656,7 +658,7 @@ namespace sc
 
 	/*!
 	 * \brief	sc::vector operator `!=` overload function
-	 * \param	const vector<T> &rhs : Right hand side object
+	 * \param	rhs : Right hand side object
 	 * \return	bool value if the two objects are unequal.
 	 * 			(true = 1, false = 0)
 	 */
@@ -715,7 +717,7 @@ namespace sc
 
 	/*!
 	 * \brief 	default iterator class constructor
-	 * \param 	T *ptr : A pointer from any type that will be stored inside the
+	 * \param 	ptr : A pointer from any type that will be stored inside the
 	 * 			iterator.
 	 */
 	template <class T>
@@ -725,7 +727,7 @@ namespace sc
 
 	/*!
 	 * \brief Alternative constructor, that recieves another iterator.
-	 * \param const vector<U>::iterator &itr : Another iterator from vector<U>.
+	 * \param itr : Another iterator from vector<U>.
 	 */
 	template <class U>
 	vector<U>::iterator::iterator( const vector<U>::iterator &itr ){
@@ -740,7 +742,7 @@ namespace sc
 
 	/*!
 	 * \brief Operator `=` overload function
-	 * \param const vector::iterator &rhs : Right hand side of the `=` sign.
+	 * \param rhs : Right hand side of the `=` sign.
 	 */
 	template <class T>
 	typename vector<T>::iterator &vector<T>::iterator::operator=(
@@ -751,7 +753,7 @@ namespace sc
 
 	/*!
 	 * \brief Operator `==` overload function
-	 * \param const vector::iterator &rhs : Right hand side of the `==` sign.
+	 * \param rhs : Right hand side of the `==` sign.
 	 */
 	template <class T>
 	bool vector<T>::iterator::operator==( const vector::iterator &rhs ) const{
@@ -760,7 +762,7 @@ namespace sc
 
 	/*!
 	 * \brief Operator `!=` overload function
-	 * \param const vector::iterator &rhs : Right hand side of the `!=` sign.
+	 * \param rhs : Right hand side of the `!=` sign.
 	 */
 	template <class T>
 	bool vector<T>::iterator::operator!=( const vector::iterator &rhs ) const{
@@ -843,7 +845,7 @@ namespace sc
 
 	/*!
 	 * \brief default const_iterator class constructor
-	 * \param T *ptr : A pointer from any type that will be stored inside the
+	 * \param ptr : A pointer from any type that will be stored inside the
 	 * iterator.
 	 */
 	template <class T>
@@ -853,7 +855,7 @@ namespace sc
 
 	/*!
 	 * \brief Alternative constructor, that recieves another const_iterator.
-	 * \param const vector<U>::const_iterator &itr : Another const_iterator from vector<U>.
+	 * \param itr : Another const_iterator from vector<U>.
 	 */
 	template <class U>
 	vector<U>::const_iterator::const_iterator( const vector<U>::const_iterator &itr ){
@@ -869,7 +871,7 @@ namespace sc
 
 	/*!
 	 * \brief Operator `=` overload function
-	 * \param const vector::const_iterator &rhs : Right hand side of the `=` sign.
+	 * \param rhs : Right hand side of the `=` sign.
 	 */
 	template <class T>
 	typename vector<T>::const_iterator &vector<T>::const_iterator::operator=(
@@ -880,7 +882,7 @@ namespace sc
 
 	/*!
 	 * \brief Operator `==` overload function
-	 * \param const vector::const_iterator &rhs : Right hand side of the `==` sign.
+	 * \param rhs : Right hand side of the `==` sign.
 	 */
 	template <class T>
 	bool vector<T>::const_iterator::operator==( const vector::const_iterator &rhs ) const{
@@ -889,7 +891,7 @@ namespace sc
 
 	/*!
 	 * \brief Operator `!=` overload function
-	 * \param const vector::const_iterator &rhs : Right hand side of the `!=` sign.
+	 * \param rhs : Right hand side of the `!=` sign.
 	 */
 	template <class T>
 	bool vector<T>::const_iterator::operator!=( const vector::const_iterator &rhs ) const{

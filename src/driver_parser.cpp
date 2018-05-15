@@ -164,7 +164,7 @@ int main(int argc, char *argv[])
 	std::ofstream output;
 
 	if(argc != 3){
-		output.open("output.txt");
+		output.open("data/output.txt");
 	}
 	else output.open(argv[2]);
 

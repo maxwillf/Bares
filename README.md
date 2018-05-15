@@ -48,9 +48,9 @@ And _rejects_ expressions like:
 * "  "
 * "+2 + 5"
 * "-02 + 4"
-* )2 - 4
-* ((2%3) * 8
-* 3/(1-1)
+* ")2 - 4"
+* "((2%3) * 8"
+* "3/(1-1)"
 
 # Usage
 
@@ -66,6 +66,9 @@ For running Bares execute it like this:
 ./bares input_file [output_file]
 ```
 
+If you just want to give it a try, there is an sample input file inside the data/ directory
+with all the samples from the project pdf located in the res/ directory.
+
 If no output file is specified this program will write to "output.txt" by
 default
 
@@ -74,3 +77,8 @@ default
 This Program was made by me, [Max William](https://github.com/maxwillf), as an
 exercise for a programming languages course i'm taking in Computer Science 
 at [Universidade Federal do Rio Grande do Norte](https://ufrn.br).
+
+## Github
+
+If you've somehow managed to find this project outside of github the original
+repository is located [here](https://github.com/maxwillf/Bares)
